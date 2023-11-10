@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-router.use("/users", require("./users"));
+router.use("/user", require("./user"));
 router.use("/games", require("./games"));
 router.use("/me", require("./user"));
 router.use("/test", require("./test"));
