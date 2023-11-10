@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { User, Game } = require("../db/models");
 const { isAuthenticated } = require("../middleware/authMiddleware");
 
-router.get("/", (req, res, next) => {
+router.get("/", isAuthenticated, (req, res, next) => {
   const { name, username, email, createdAt, updatedAt } = req.user;
   const user = {
     name,

@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const { Game } = require("../db/models");
 
-// Root here is localhost:8080/api/users/
 router.get("/", async (req, res, next) => {
   try {
     const allGames = await Game.findAll();
