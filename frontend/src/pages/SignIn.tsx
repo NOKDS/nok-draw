@@ -19,7 +19,7 @@ import GoogleLoginButton from "../components/GoogleLoginButton";
 import { loginUserThunk } from "../redux/user/user.actions";
 
 // @ts-ignore
-import Video from "../assets/BackgroundVideo.mp4";
+import Video from "../assets/BackgroundVideo2.mp4";
 import Alert from "@mui/material/Alert";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
@@ -86,7 +86,7 @@ export default function SignIn() {
 
   return (
     <>
-      {/* <RenderVideoBackground videoSource={Video} low={30} high={70} /> */}
+      <RenderVideoBackground videoSource={Video} low={30} high={70} />
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />

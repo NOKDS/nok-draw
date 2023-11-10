@@ -168,7 +168,7 @@ export default function Home() {
 
   return (
     <div>
-      {/* <RenderVideoBackground videoSource={Video1} low={30} high={70} /> */}
+      <RenderVideoBackground videoSource={Video1} low={30} high={70} />
       <Container>
         <CssBaseline />
         <section className="section1" style={{ height: "100vh" }}>
@@ -176,7 +176,7 @@ export default function Home() {
         </section>
       </Container>
       <div style={{ position: "relative" }}>
-        {/* <RenderVideoBackground videoSource={Video2} low={30} high={70} /> */}
+        <RenderVideoBackground videoSource={Video2} low={30} high={70} />
         <Container>
           <CssBaseline />
           <section className="section2" style={{ height: "100vh" }}>
