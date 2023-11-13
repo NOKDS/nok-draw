@@ -6,8 +6,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import logoImage2 from "../assets/logo2.svg";
 import logoImage3 from "../assets/logo3.svg";
-import Button from "@mui/material/Button";
 import ResponsiveToolTip from "./ResponsiveToolTip";
+import { RootState } from "../redux/rootReducer";
+import { useSelector } from "react-redux";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -63,7 +64,7 @@ interface ButtonAppBarProps {
 const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ handleLogout }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const logoSrc = darkMode ? logoImage2 : logoImage3;
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
 
   return (
     <div

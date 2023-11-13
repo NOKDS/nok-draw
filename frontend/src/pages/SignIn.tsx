@@ -17,66 +17,64 @@ import Footer from "../components/Footer";
 import RenderVideoBackground from "../components/RenderVideoBackground";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { loginUserThunk } from "../redux/user/user.actions";
-
-// @ts-ignore
-import Video from "../assets/BackgroundVideo2.mp4";
 import Alert from "@mui/material/Alert";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
-
 import { RootState } from "../redux/rootReducer";
+// @ts-ignore
+import Video from "../assets/BackgroundVideo2.mp4";
 
-export default function SignIn() {
+const SignIn: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   const resetForm = () => {
-    setEmail("");
+    setIdentifier("");
     setPassword("");
     setFormError("");
-    setSubmitted(false);
     setHasError(false);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
-    setSubmitted(true);
 
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email as string);
+    const isValidIdentifier =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier) ||
+      /^[a-zA-Z0-9_]+$/.test(identifier);
+
     const isValidPassword = (password as string).trim() !== "";
 
-    if (!isValidEmail || !isValidPassword) {
+    if (!isValidIdentifier || !isValidPassword) {
       setFormError("Invalid email/username or password.");
       setHasError(true);
       return;
     }
 
     const userData = {
-      email: isValidEmail ? (email as string) : null,
-      username: isValidEmail ? null : (email as string),
+      email: isValidIdentifier ? identifier : null,
+      username: isValidIdentifier ? null : identifier,
       password: password as string,
     };
 
+    console.log(userData);
     if (!userData.email && !userData.username) {
       setFormError("Please enter a valid email or username.");
       setHasError(true);
       return;
     }
+
     try {
       await dispatch(loginUserThunk(userData));
-      console.log(userData);
       resetForm();
-      navigate("/profile");
+      navigate("/dashboard");
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
-        setFormError("Invalid email/username or password.");
+        setFormError("Invalid username or password.");
       } else {
         setFormError("An error occurred. Please try again later.");
       }
@@ -131,13 +129,13 @@ export default function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="identifier"
+                label="Username"
+                name="identifier"
+                autoComplete="email user-name"
                 autoFocus
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -161,18 +159,15 @@ export default function SignIn() {
                 Sign In
               </Button>
               <GoogleLoginButton />
-              <Button></Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+              <Grid container justifyContent="center" sx={{ mt: 2 }}>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid container justifyContent="center" sx={{ mt: 1 }}>
+                <Link href="/signup" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </Grid>
             </Box>
           </Paper>
@@ -191,4 +186,6 @@ export default function SignIn() {
       </div>
     </>
   );
-}
+};
+
+export default SignIn;

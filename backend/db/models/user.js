@@ -46,6 +46,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    image: {
+      type: DataTypes.STRING,
+      defaultValue: "https://i.imgur.com/WnjTXAa.png",
+    },
   },
   {
     sequelize: db,

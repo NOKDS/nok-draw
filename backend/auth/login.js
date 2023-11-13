@@ -29,8 +29,16 @@ router.post("/", async (req, res, next) => {
         return next(err);
       }
       console.log(`Logged in as ${user.username}`);
+      const userData = {
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        image: user.image,
+      };
       req.session.save(() => {
-        return res.status(200).json({ message: "Logged in successfully" });
+        return res.status(200).json(userData);
       });
     });
   } catch (error) {

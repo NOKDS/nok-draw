@@ -12,7 +12,6 @@ import Typewriter from "typewriter-effect";
 import { useTheme } from "../context/ThemeContext";
 import Footer from "../components/Footer";
 import RenderVideoBackground from "../components/RenderVideoBackground";
-
 // @ts-ignore
 import Video1 from "../assets/BackgroundVideo10.mp4";
 // @ts-ignore
@@ -33,7 +32,7 @@ const cardsData = [
   },
 ];
 
-export default function Home() {
+const Home: React.FC = () => {
   const { darkMode } = useTheme();
 
   const renderHeaderSection = () => (
@@ -107,7 +106,7 @@ export default function Home() {
   );
 
   const renderFeaturesSection = () => (
-    <Container sx={{ pt: 25 }} maxWidth="md">
+    <Container sx={{ pt: 20 }} maxWidth="md">
       <Typography
         variant="h3"
         align="center"
@@ -135,7 +134,7 @@ export default function Home() {
       </Typography>
       <Grid container spacing={4}>
         {cardsData.map((card) => (
-          <Grid item key={card.id} xs={12} sm={6} md={6}>
+          <Grid item key={card.id} xs={6} sm={6} md={6}>
             <Card
               sx={{
                 height: "100%",
@@ -168,7 +167,7 @@ export default function Home() {
 
   return (
     <div>
-      <RenderVideoBackground videoSource={Video1} low={30} high={70} />
+      <RenderVideoBackground videoSource={Video1} low={30} high={60} />
       <Container>
         <CssBaseline />
         <section className="section1" style={{ height: "100vh" }}>
@@ -176,7 +175,7 @@ export default function Home() {
         </section>
       </Container>
       <div style={{ position: "relative" }}>
-        <RenderVideoBackground videoSource={Video2} low={30} high={70} />
+        <RenderVideoBackground videoSource={Video2} low={30} high={60} />
         <Container>
           <CssBaseline />
           <section className="section2" style={{ height: "100vh" }}>
@@ -187,4 +186,6 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default Home;

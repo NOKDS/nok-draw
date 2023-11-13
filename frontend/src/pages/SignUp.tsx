@@ -1,4 +1,7 @@
 import * as React from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,18 +15,88 @@ import Container from "@mui/material/Container";
 import Footer from "../components/Footer";
 import Paper from "@mui/material/Paper";
 import RenderVideoBackground from "../components/RenderVideoBackground";
-
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import { RootState } from "../redux/rootReducer";
 // @ts-ignore
 import Video from "../assets/BackgroundVideo9.mp4";
+import { signupUserThunk } from "../redux/user/user.actions";
+import Alert from "@mui/material/Alert";
 
-export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+const SignUp: React.FC = () => {
+  const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
+  const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
+  const [hasError, setHasError] = useState(false);
+
+  const resetForm = () => {
+    setFirstName("");
+    setLastName("");
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setFormError("");
+    setHasError(false);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !username.trim() ||
+      !email.trim() ||
+      !password.trim()
+    ) {
+      setFormError("All fields are required.");
+      setHasError(true);
+      return;
+    }
+
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isValidEmail) {
+      setFormError("Invalid email address.");
+      setHasError(true);
+      return;
+    }
+
+    const isValidPassword = password.trim().length >= 6;
+    if (!isValidPassword) {
+      setFormError("Password must be at least 6 characters long.");
+      setHasError(true);
+      return;
+    }
+
+    try {
+      const userData = {
+        name: `${firstName.trim()} ${lastName.trim()}`,
+        username: username.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      };
+
+      await dispatch(signupUserThunk(userData));
+
+      resetForm();
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.log(error.response.data);
+      if (error.response.data === "Email already exists") {
+        setFormError("Email exists. Please use a different email.");
+      } else if (error.response.data === "Username already exists") {
+        setFormError("Username exists. Please use a different email.");
+      } else {
+        setFormError("An error occurred. Please try again later.");
+      }
+      setHasError(true);
+    }
   };
 
   return (
@@ -79,6 +152,8 @@ export default function SignUp() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -89,6 +164,20 @@ export default function SignUp() {
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="user-name"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -99,6 +188,8 @@ export default function SignUp() {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -110,9 +201,15 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </Grid>
+                <Grid item xs={12} sx={{ mt: -1 }}>
+                  {hasError && <Alert severity="error">{formError}</Alert>}
+                </Grid>
               </Grid>
+
               <Button
                 type="submit"
                 fullWidth
@@ -145,4 +242,6 @@ export default function SignUp() {
       </div>
     </>
   );
-}
+};
+
+export default SignUp;

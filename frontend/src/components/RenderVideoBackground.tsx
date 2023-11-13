@@ -6,11 +6,11 @@ interface VideoBackgroundProps {
   high: number;
 }
 
-export default function VideoBackground({
+const VideoBackground: React.FC<VideoBackgroundProps> = ({
   videoSource,
   low,
   high,
-}: VideoBackgroundProps) {
+}) => {
   const { darkMode } = useTheme();
 
   return (
@@ -32,4 +32,6 @@ export default function VideoBackground({
       <source src={videoSource} type="video/mp4" />
     </video>
   );
-}
+};
+
+export default VideoBackground;

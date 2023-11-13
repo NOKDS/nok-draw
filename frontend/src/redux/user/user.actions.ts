@@ -79,16 +79,16 @@ export const signupUserThunk =
   async (dispatch) => {
     try {
       console.log("SIGNUPUSERTHUNK FIRING UP");
-
+      console.log(userData);
       const response = await axios.post(
         `http://localhost:8080/auth/signup`,
         userData,
         { withCredentials: true }
       );
       dispatch(signupUser(response.data));
-      sessionStorage.setItem("isLoggedIn", "true");
+      dispatch(setLoginStatus(true));
     } catch (error) {
-      sessionStorage.setItem("isLoggedIn", "false");
+      dispatch(setLoginStatus(false));
       console.error(error);
       throw error;
     }
@@ -106,8 +106,9 @@ export const loginUserThunk =
         { withCredentials: true }
       );
       dispatch(loginUser(response.data));
-      sessionStorage.setItem("isLoggedIn", "true");
+      dispatch(setLoginStatus(true));
     } catch (error) {
+      dispatch(setLoginStatus(false));
       console.error(error);
       throw error;
     }
@@ -122,7 +123,7 @@ export const logoutUserThunk =
         withCredentials: true,
       });
       dispatch(logoutUser());
-      sessionStorage.removeItem("isLoggedIn");
+      dispatch(setLoginStatus(false));
     } catch (error) {
       console.error(error);
     }
@@ -135,7 +136,7 @@ export const deleteUserThunk =
         withCredentials: true,
       });
       dispatch(deleteUser());
-      sessionStorage.removeItem("isLoggedIn");
+      dispatch(setLoginStatus(false));
     } catch (error) {
       console.error(error);
     }

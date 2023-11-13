@@ -39,23 +39,33 @@ router.get(
 router.get(
   "/callback",
   passport.authenticate("google", {
-    failureRedirect: `http://localhost:3000//login`,
-  }),
-  async (req, res) => {
-    console.log("Google authentication successful");
-    const user = await User.findOne({
-      where: { email: req.user.dataValues.email },
-    });
+    failureRedirect: `http://localhost:3000/login`,
+    successRedirect: `http://localhost:3000/login?googleSignInSuccess=true`,
+  })
+  // async (req, res) => {
+  //   console.log("Google authentication successful");
+  //   const user = await User.findOne({
+  //     where: { email: req.user.dataValues.email },
+  //   });
 
-    req.login(user, (err) => {
-      if (err) {
-        console.error("Error creating session:", err);
-        return res.status(500).json({ message: "Server Error" });
-      }
-
-      console.log(`Logged in as ${user.dataValues.username}`);
-      res.redirect(`http://localhost:3000/profile`);
-    });
-  }
+  //   req.login(user, (err) => {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     console.log(`Logged in as ${user.username}`);
+  //     const userData = {
+  //       name: user.name,
+  //       username: user.username,
+  //       email: user.email,
+  //       createdAt: user.createdAt,
+  //       updatedAt: user.updatedAt,
+  //       image: user.image,
+  //     };
+  //     req.session.save(() => {
+  //       return res.status(200).json(userData);
+  //     });
+  //   });
+  // }
 );
+
 module.exports = router;

@@ -1,3 +1,4 @@
+import React from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
@@ -15,7 +16,7 @@ function Copyright() {
   );
 }
 
-export default function Footer() {
+const Footer: React.FC = () => {
   return (
     <div>
       <Container
@@ -38,4 +39,6 @@ export default function Footer() {
       </Container>
     </div>
   );
-}
+};
+
+export default Footer;

@@ -6,6 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 
 interface ResponsiveToolTipProps {
   handleLogout: () => void;
@@ -14,6 +15,7 @@ interface ResponsiveToolTipProps {
 const ResponsiveToolTip: React.FC<ResponsiveToolTipProps> = ({
   handleLogout,
 }) => {
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
@@ -26,7 +28,7 @@ const ResponsiveToolTip: React.FC<ResponsiveToolTipProps> = ({
     setAnchorElUser(null);
   };
 
-  const menu = ["Profile", "Settings", "Dashboard", "Logout"];
+  const menu = ["Dashboard", "Settings", "Logout"];
 
   return (
     <Box sx={{ mr: 5, mb: 1 }}>
@@ -57,10 +59,13 @@ const ResponsiveToolTip: React.FC<ResponsiveToolTipProps> = ({
             onClick={() => {
               if (setting === "Logout") {
                 handleLogout();
-                handleCloseUserMenu();
+              } else if (setting === "Dashboard") {
+                navigate("/dashboard");
+              } else if (setting === "Settings") {
+                navigate("/settings");
               } else {
-                handleCloseUserMenu();
               }
+              handleCloseUserMenu();
             }}
           >
             <Typography textAlign="center">{setting}</Typography>
