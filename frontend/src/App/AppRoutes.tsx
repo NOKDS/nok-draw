@@ -6,6 +6,7 @@ import SignUp from "../pages/SignUp";
 import Test from "../pages/Test";
 import ProtectedRoute from "../components/ProtectedRoute";
 import UserProfile from "../pages/Test";
+import GameRoom from "../components/GameRoom";
 const AppRoutes = () => {
   const isLoggedIn = !!sessionStorage.getItem("isLoggedIn");
   return (
@@ -14,6 +15,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/test" element={<Test />} />
+      <Route path="/gameroom" element={<GameRoom/>} />
       <Route
         path="/profile"
         element={
