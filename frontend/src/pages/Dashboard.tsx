@@ -99,6 +99,7 @@ const Dashboard: React.FC = () => {
             <Button
               variant="contained"
               color="primary"
+              href="/play"
               startIcon={<SportsEsportsIcon />}
               sx={{ width: "100%", mt: 4 }}
             >
