@@ -96,15 +96,33 @@ const Dashboard: React.FC = () => {
               {user.email} | @{user.username}
             </Typography>
             <PlayerStats username={"hoho"} />
-            <Button
-              variant="contained"
-              color="primary"
-              href="/play"
-              startIcon={<SportsEsportsIcon />}
-              sx={{ width: "100%", mt: 4 }}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 3,
+                mt: 3,
+              }}
             >
-              Play Now
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                href="/playSmode"
+                startIcon={<SportsEsportsIcon />}
+                sx={{ width: "50%" }}
+              >
+                Play Single player Mode
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                href="/playMmode"
+                startIcon={<SportsEsportsIcon />}
+                sx={{ width: "50%" }}
+              >
+                Play Multiplayer Mode
+              </Button>
+            </Box>
           </Paper>
         </Container>
       </Box>

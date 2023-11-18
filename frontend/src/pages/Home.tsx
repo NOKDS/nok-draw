@@ -85,7 +85,7 @@ const Home: React.FC = () => {
         >
           <Button
             variant="outlined"
-            href="/play"
+            href="/playSmode"
             sx={{
               fontWeight: "bold",
               color: darkMode === true ? "white" : "black",
