@@ -3,7 +3,8 @@ import SignIn from "../pages/SignIn";
 import Home from "../pages/Home";
 import SignUp from "../pages/SignUp";
 import ProtectedRoute from "../components/ProtectedRoute";
-import GameRoom from "../components/GameRoom";
+import MultiplayerMode from "../components/MultiplayerMode";
+import SinglePlayerMode from "../components/SinglePlayerMode";
 import Dashboard from "../pages/Dashboard";
 import { RootState } from "../redux/rootReducer";
 import { useSelector } from "react-redux";
@@ -15,7 +16,8 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/play" element={<GameRoom />} />
+      <Route path="/playSmode" element={<SinglePlayerMode />} />
+      <Route path="/playMmode" element={<MultiplayerMode />} />
       <Route
         path="/dashboard"
         element={
