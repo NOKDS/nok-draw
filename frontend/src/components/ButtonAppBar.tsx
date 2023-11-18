@@ -78,7 +78,7 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ handleLogout }) => {
         alignItems: "center",
       }}
     >
-      <Grid container sx={{ pt: 0.5, flexGrow: 1 }}>
+      <Grid container sx={{ pt: 0, flexGrow: 1 }}>
         <Typography
           variant="h6"
           component="div"
@@ -95,7 +95,7 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ handleLogout }) => {
             />
           </a>
         </Typography>
-        <Grid alignItems="center" sx={{ display: "flex" }}>
+        <Grid alignItems="center" sx={{ display: "flex", pb: 1 }}>
           <FormControlLabel
             control={
               <MaterialUISwitch onClick={toggleDarkMode} checked={darkMode} />
