@@ -6,6 +6,14 @@ const Game = db.define("Game", {
     type: DataTypes.BOOLEAN,
     allowNull: false,
   },
+  top3Predications: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = Game;
