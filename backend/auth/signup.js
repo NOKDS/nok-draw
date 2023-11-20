@@ -24,14 +24,23 @@ router.post("/", async (req, res, next) => {
       password,
     });
 
-    req.logIn(user, (err) => {
+    req.login(user, (err) => {
       if (err) {
         return next(err);
       }
-      console.log(`${user.username} signuped successfully`);
-      console.log(`${user.username} logged in successfully`);
-
-      return res.status(200).json({ message: "Signed up successfully" });
+      console.log(`${user.username} signed up successfully`);
+      console.log(`Logged in as ${user.username}`);
+      const userData = {
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        image: user.image,
+      };
+      req.session.save(() => {
+        return res.status(200).json(userData);
+      });
     });
   } catch (error) {
     next(error);
