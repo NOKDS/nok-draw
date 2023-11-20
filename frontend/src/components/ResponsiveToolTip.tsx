@@ -7,6 +7,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/rootReducer";
 
 interface ResponsiveToolTipProps {
   handleLogout: () => void;
@@ -15,6 +17,8 @@ interface ResponsiveToolTipProps {
 const ResponsiveToolTip: React.FC<ResponsiveToolTipProps> = ({
   handleLogout,
 }) => {
+  const user = useSelector((state: RootState) => state.user.user);
+
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -31,10 +35,10 @@ const ResponsiveToolTip: React.FC<ResponsiveToolTipProps> = ({
   const menu = ["Dashboard", "Settings", "Logout"];
 
   return (
-    <Box sx={{ mr: 5, mb: 1 }}>
+    <Box sx={{ mr: 4, mb: 1 }}>
       <Tooltip title="Open menu">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+          <Avatar alt={`${user.name}`} src={`${user.image}`} />
         </IconButton>
       </Tooltip>
       <Menu

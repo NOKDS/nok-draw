@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
     <div>
       <Container
         sx={{
-          position: "relative",
+          position: "sticky",
           left: 0,
           bottom: 0,
         }}

@@ -1,26 +1,36 @@
 import React from "react";
 
-interface PlayerStatsProps {
-  username: string;
+interface Game {
+  id: number;
+  isWon: boolean;
+  top3Predications: string;
+  image: string;
+  createdAt: string;
 }
 
-const PlayerStats: React.FC<PlayerStatsProps> = ({ username }) => {
-  const dummyStats = {
-    gamesPlayed: 50,
-    wins: 30,
-    losses: 20,
-    highestScore: 1200,
-    averageScore: 1000,
-  };
+interface PlayerStatsProps {
+  games: Game[];
+}
+
+const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
+  const stats = games.reduce(
+    (acc, game) => {
+      if (game.isWon) {
+        acc.wins++;
+      } else {
+        acc.losses++;
+      }
+      return acc;
+    },
+    { wins: 0, losses: 0 } as { wins: number; losses: number }
+  );
 
   return (
     <div>
       <h3>Player Stats</h3>
-      <p>Games Played: {dummyStats.gamesPlayed}</p>
-      <p>Wins: {dummyStats.wins}</p>
-      <p>Losses: {dummyStats.losses}</p>
-      <p>Highest Score: {dummyStats.highestScore}</p>
-      <p>Average Score: {dummyStats.averageScore}</p>
+      <p>Games Played: {games.length}</p>
+      <p>Wins: {stats.wins}</p>
+      <p>Losses: {stats.losses}</p>
     </div>
   );
 };
