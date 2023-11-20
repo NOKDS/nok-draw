@@ -9,22 +9,22 @@ export const fetchUser = (userData: any) => ({
   payload: userData,
 });
 
-export const updateUser = (updateData: any) => ({
+export const updateUser = (updateData: object) => ({
   type: UserActionTypes.UPDATE_USER,
   payload: updateData,
 });
 
-export const signupUser = (userData: any) => ({
+export const signupUser = (userData: object) => ({
   type: UserActionTypes.SIGNUP_USER,
   payload: userData,
 });
 
-export const loginUser = (userData: any) => ({
+export const loginUser = (userData: object) => ({
   type: UserActionTypes.LOGIN_USER,
   payload: userData,
 });
 
-export const loginGoogle = (userData: any) => ({
+export const loginGoogle = (userData: object) => ({
   type: UserActionTypes.LOGIN_GOOGLE,
   payload: userData,
 });

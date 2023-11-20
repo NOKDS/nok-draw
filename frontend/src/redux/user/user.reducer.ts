@@ -5,7 +5,7 @@ interface UserState {
   isLoggedIn: boolean;
 }
 
-const initialState: UserState = {
+const INITIAL_USER_STATE: UserState = {
   user: {},
   isLoggedIn: false,
 };
@@ -15,7 +15,10 @@ interface UserAction {
   payload: any;
 }
 
-const userReducer = (state: UserState = initialState, action: UserAction) => {
+const userReducer = (
+  state: UserState = INITIAL_USER_STATE,
+  action: UserAction
+) => {
   switch (action.type) {
     case UserActionTypes.FETCH_USER:
       return { ...state, user: action.payload };
