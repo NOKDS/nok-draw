@@ -12,27 +12,9 @@ import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../redux/rootReducer";
 import { AnyAction } from "redux";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import avatars from "./RenderAvatars";
 
-interface AvatarProps {}
-
-const Avatar: React.FC<AvatarProps> = () => {
-  const avatarArray: string[] = [
-    "https://i.imgur.com/ILNEfjt.png",
-    "https://i.imgur.com/TF9TEjr.png",
-    "https://i.imgur.com/dpMYaXu.png",
-    "https://i.imgur.com/Y412yO8.png",
-    "https://i.imgur.com/DToTkDh.png",
-    "https://i.imgur.com/7P3Ncsk.png",
-    "https://i.imgur.com/ky6Fjc0.png",
-    "https://i.imgur.com/WnjTXAa.png",
-    "https://i.imgur.com/BWasaAA.png",
-    "https://i.imgur.com/8laaP4z.png",
-    "https://i.imgur.com/Ed34k87.png",
-    "https://i.imgur.com/xUW73LZ.jpg",
-    "https://i.imgur.com/RnzsTJw.jpg",
-    "https://i.imgur.com/oCdKdbc.jpg",
-  ];
-
+const Avatar: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
 
@@ -61,15 +43,17 @@ const Avatar: React.FC<AvatarProps> = () => {
           <ArrowBackIcon sx={{ fontSize: 32 }} />
         </IconButton>
         <Grid container spacing={2} justifyContent="center" sx={{ pt: 5 }}>
-          {avatarArray.map((avatar, index) => (
+          {avatars.map((avatar, index) => (
             <Grid item key={index} xs="auto" sm="auto" md="auto">
               <div className="avatar-element">
                 <Button
                   onClick={() => handleSubmit(avatar)}
                   className="avatar-submit-btn"
                   sx={{
-                    width: "100%",
+                    maxWidth: "100%",
+                    maxHeight: "100%",
                     borderRadius: "50%",
+                    objectFit: "cover",
                     "&:hover": {
                       border: "2px solid #007BFF",
                       transform: "scale(1.05)",
@@ -78,8 +62,9 @@ const Avatar: React.FC<AvatarProps> = () => {
                   }}
                 >
                   <img
+                    key={index}
                     src={avatar}
-                    alt={`user profile ${index}`}
+                    alt={`user profile ${index + 1}`}
                     className="avatar-image"
                     style={{
                       width: "15rem",
