@@ -9,6 +9,7 @@ import logoImage3 from "../assets/logo3.svg";
 import ResponsiveToolTip from "./ResponsiveToolTip";
 import { RootState } from "../redux/rootReducer";
 import { useSelector } from "react-redux";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -65,47 +66,52 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ handleLogout }) => {
   const { darkMode, toggleDarkMode } = useTheme();
   const logoSrc = darkMode ? logoImage2 : logoImage3;
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-
+  const href = isLoggedIn ? "/home" : "/";
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        width: "100%",
-        zIndex: 1,
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <Grid container sx={{ pt: 0, flexGrow: 1 }}>
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ pt: 0, pl: 2, flexGrow: 1 }}
-        >
-          <a href="/" style={{ textDecoration: "none", color: "inherit" }}>
-            <img
-              src={logoSrc}
-              alt="Logo"
-              style={{
-                width: "100px",
-                height: "auto",
-              }}
+    <>
+      <CssBaseline />
+
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          width: "100%",
+          zIndex: 1,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          height: 100,
+        }}
+      >
+        <Grid container sx={{ pt: 0, flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ pt: 0, pl: 2, flexGrow: 1 }}
+          >
+            <a href={href} style={{ textDecoration: "none", color: "inherit" }}>
+              <img
+                src={logoSrc}
+                alt="Logo"
+                style={{
+                  width: "100px",
+                  height: "auto",
+                }}
+              />
+            </a>
+          </Typography>
+          <Grid alignItems="center" sx={{ display: "flex", pb: 1 }}>
+            <FormControlLabel
+              control={
+                <MaterialUISwitch onClick={toggleDarkMode} checked={darkMode} />
+              }
+              label=""
             />
-          </a>
-        </Typography>
-        <Grid alignItems="center" sx={{ display: "flex", pb: 1 }}>
-          <FormControlLabel
-            control={
-              <MaterialUISwitch onClick={toggleDarkMode} checked={darkMode} />
-            }
-            label=""
-          />
-          {isLoggedIn && <ResponsiveToolTip handleLogout={handleLogout} />}
+            {isLoggedIn && <ResponsiveToolTip handleLogout={handleLogout} />}
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </div>
+    </>
   );
 };
 
