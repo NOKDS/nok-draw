@@ -16,6 +16,7 @@ import RenderVideoBackground from "../components/RenderVideoBackground";
 import Video1 from "../assets/BackgroundVideo10.mp4";
 // @ts-ignore
 import Video2 from "../assets/BackgroundVideo1.mp4";
+import { Link } from "react-router-dom";
 
 const cardsData = [
   {
@@ -46,6 +47,7 @@ const Home: React.FC = () => {
           gutterBottom
           sx={{
             color: darkMode === true ? "lime" : "yellow",
+            fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
           }}
         >
           <div className="">
@@ -72,6 +74,7 @@ const Home: React.FC = () => {
           sx={{
             color: darkMode === true ? "white" : "white",
             p: 1,
+            fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.3rem" },
           }}
         >
           Will your creations conquer the machine's judgment? Get ready to
@@ -79,17 +82,20 @@ const Home: React.FC = () => {
         </Typography>
         <Stack
           sx={{ pt: 4 }}
-          direction="row"
+          direction={{ xs: "column", sm: "row" }}
           spacing={2}
           justifyContent="center"
         >
           <Button
             variant="outlined"
-            href="/playSmode"
+            component={Link}
+            to="/playSmode"
             sx={{
               fontWeight: "bold",
               color: darkMode === true ? "white" : "black",
               borderColor: darkMode === true ? "white" : "black",
+              fontSize: "0.8rem",
+              width: { xs: "100%", sm: "auto" },
               "&:hover": {
                 bgcolor: darkMode === true ? "red" : "pink",
                 borderColor: darkMode === true ? "white" : "skyblue",
@@ -98,7 +104,15 @@ const Home: React.FC = () => {
           >
             Play as a guest
           </Button>
-          <Button variant="contained" href="/login">
+          <Button
+            variant="contained"
+            component={Link}
+            to="/login"
+            sx={{
+              fontSize: "0.8rem",
+              width: { xs: "100%", sm: "auto" },
+            }}
+          >
             Login
           </Button>
         </Stack>

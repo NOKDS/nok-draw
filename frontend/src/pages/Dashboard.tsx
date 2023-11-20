@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import PlayerStats from "../components/PlayerStats";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import RenderBackgroundImage from "../components/RenderBackgroundImage";
 import Image from "../assets/background.jpg";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,9 +19,11 @@ import { RootState } from "../redux/rootReducer";
 import { fetchUser, fetchUserThunk } from "../redux/user/user.actions";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
+import { fetchGames, fetchGamesThunk } from "../redux/games/games.actions";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
+  const games = useSelector((state: RootState) => state.games.games);
   const theme = useTheme();
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
   const navigate = useNavigate();
@@ -32,19 +34,32 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const cachedUser = localStorage.getItem("cachedUser");
+    const cachedGames = localStorage.getItem("cachedGames");
 
     if (cachedUser) {
       dispatch(fetchUser(JSON.parse(cachedUser)));
     } else {
       dispatch(fetchUserThunk());
     }
-  }, [dispatch]);
+
+    if (cachedGames) {
+      dispatch(fetchGames(JSON.parse(cachedGames)));
+    } else {
+      dispatch(fetchGamesThunk(user.id));
+    }
+  }, [dispatch, user.id]);
 
   useEffect(() => {
     if (user) {
       localStorage.setItem("cachedUser", JSON.stringify(user));
     }
   }, [user]);
+
+  useEffect(() => {
+    if (games) {
+      localStorage.setItem("cachedGames", JSON.stringify(games));
+    }
+  }, [games]);
 
   return (
     <>
@@ -95,7 +110,7 @@ const Dashboard: React.FC = () => {
             <Typography variant="body1" color="textSecondary" mb={4}>
               {user.email} | @{user.username}
             </Typography>
-            <PlayerStats username={"hoho"} />
+            <PlayerStats games={games} />
             <Box
               sx={{
                 display: "flex",
@@ -107,7 +122,8 @@ const Dashboard: React.FC = () => {
               <Button
                 variant="contained"
                 color="primary"
-                href="/playSmode"
+                component={Link}
+                to="/playSmode"
                 startIcon={<SportsEsportsIcon />}
                 sx={{ width: "50%" }}
               >
@@ -116,7 +132,8 @@ const Dashboard: React.FC = () => {
               <Button
                 variant="outlined"
                 color="primary"
-                href="/playMmode"
+                component={Link}
+                to="/playMmode"
                 startIcon={<SportsEsportsIcon />}
                 sx={{ width: "50%" }}
               >
