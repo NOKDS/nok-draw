@@ -1,3 +1,4 @@
+const axios = require('axios')
 module.exports = function setupSocketServer(io) {
     let queue = [];
     let roomCount = 0;
@@ -37,6 +38,17 @@ module.exports = function setupSocketServer(io) {
             // emit base64 data from the user to all others in the room 
             socket.to(data.roomName).emit('serverDraw', data);
             console.log('canvasData: sent it to other users')
+            try {
+                const response = await axios.post('http://127.0.0.1:5000/predict', {
+                    canvas_data: data.base64Img,
+                    user_id: data.userId,
+                    room_name: data.roomName
+                });
+                console.log('getting response', response.data)
+
+            } catch (e) {
+                console.log(e)
+            }
 
         });
 
