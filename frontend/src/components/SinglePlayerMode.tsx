@@ -211,15 +211,15 @@ const SinglePlayerCanvas = () => {
             ? `url('${eraserCursor}'), auto`
             : `url('${pencilCursor}'), auto`,
           background: darkMode ? "#2c2c2c" : "#f0f0f0",
-          width: "100vw",
-          height: "100vh",
+          width: window.innerWidth,
+          height: window.innerHeight,
           position: "absolute",
           backgroundColor: darkMode ? "silver" : "default",
           top: 0,
           left: 0,
         }}
-        width={1000}
-        height={1000}
+        width={window.innerWidth}
+        height={window.innerHeight}
         ref={canvasRef}
       ></canvas>
     </Container>
