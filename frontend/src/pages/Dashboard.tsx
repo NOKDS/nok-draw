@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useTheme } from "@mui/material/styles";
 import {
   Avatar,
@@ -16,10 +16,11 @@ import RenderBackgroundImage from "../components/RenderBackgroundImage";
 import Image from "../assets/background.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
-import { fetchUser, fetchUserThunk } from "../redux/user/user.actions";
+import { fetchUserThunk } from "../redux/user/user.actions";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
-import { fetchGames, fetchGamesThunk } from "../redux/games/games.actions";
+import { fetchGamesThunk } from "../redux/games/games.actions";
+import Games from "../components/Games";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -32,22 +33,39 @@ const Dashboard: React.FC = () => {
     navigate("/dashboard/avatar");
   };
 
+  const fetchData = useCallback(async () => {
+    try {
+      const cachedUser = localStorage.getItem("cachedUser");
+      const cachedGames = localStorage.getItem("cachedGames");
+      if (cachedUser) {
+        const parsedCachedUser = JSON.parse(cachedUser);
+        if (!user || parsedCachedUser.id !== user.id) {
+          await dispatch(fetchUserThunk());
+        }
+      } else {
+        await dispatch(fetchUserThunk());
+      }
+
+      if (user && cachedGames) {
+        const parsedCachedGames = JSON.parse(cachedGames);
+        if (
+          !games ||
+          JSON.stringify(parsedCachedGames) !== JSON.stringify(games)
+        ) {
+          // if (!games || parsedCachedGames.createdAt !== games[0]?.createdAt) {
+          await dispatch(fetchGamesThunk());
+        }
+      } else {
+        await dispatch(fetchGamesThunk());
+      }
+    } catch (error) {
+      console.error("Error fetching user or games:", error);
+    }
+  }, [dispatch, user, games]);
+
   useEffect(() => {
-    const cachedUser = localStorage.getItem("cachedUser");
-    const cachedGames = localStorage.getItem("cachedGames");
-
-    if (cachedUser) {
-      dispatch(fetchUser(JSON.parse(cachedUser)));
-    } else {
-      dispatch(fetchUserThunk());
-    }
-
-    if (cachedGames) {
-      dispatch(fetchGames(JSON.parse(cachedGames)));
-    } else {
-      dispatch(fetchGamesThunk(user.id));
-    }
-  }, [dispatch, user.id]);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     if (user) {
@@ -62,7 +80,8 @@ const Dashboard: React.FC = () => {
   }, [games]);
 
   return (
-    <>
+    <div style={{ minHeight: "100vh", position: "relative" }}>
+      <RenderBackgroundImage imageSource={Image} low={40} high={80} />
       <Box
         sx={{
           minHeight: "100vh",
@@ -72,12 +91,11 @@ const Dashboard: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <RenderBackgroundImage imageSource={Image} low={40} high={80} />
         <CssBaseline />
-        <Container maxWidth="md" sx={{ pt: 15 }}>
+        <Container maxWidth="md" sx={{ pt: 25 }}>
           <Paper
             elevation={8}
-            sx={{ padding: theme.spacing(4), textAlign: "center" }}
+            sx={{ padding: theme.spacing(2), textAlign: "center" }}
           >
             <Button
               onClick={handleAvatarClick}
@@ -100,6 +118,19 @@ const Dashboard: React.FC = () => {
                     border: "2px solid #007BFF",
                     transform: "scale(1.05)",
                     boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                    "&::after": {
+                      content: "'Change Avatar'",
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      backgroundColor: "rgba(0, 0, 0, 0.7)",
+                      color: "white",
+                    },
                   },
                 }}
               />
@@ -110,12 +141,11 @@ const Dashboard: React.FC = () => {
             <Typography variant="body1" color="textSecondary" mb={4}>
               {user.email} | @{user.username}
             </Typography>
-            <PlayerStats games={games} />
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                gap: 3,
+                gap: 1,
                 mt: 3,
               }}
             >
@@ -142,8 +172,28 @@ const Dashboard: React.FC = () => {
             </Box>
           </Paper>
         </Container>
+        <Container maxWidth="md" sx={{ mt: 5, mb: 5 }}>
+          <Paper
+            elevation={8}
+            sx={{ padding: theme.spacing(2), textAlign: "center" }}
+          >
+            <PlayerStats games={games} />
+          </Paper>
+          <Paper
+            elevation={8}
+            sx={{
+              padding: theme.spacing(2),
+              mt: 2,
+              p: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Games games={games} />
+          </Paper>
+        </Container>
       </Box>
-    </>
+    </div>
   );
 };
 
