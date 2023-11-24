@@ -46,9 +46,12 @@ export const fetchUserThunk =
   (): ThunkAction<void, RootState, null, AnyAction> => async (dispatch) => {
     try {
       console.log("FETCHUSERTHUNK FIRING UP");
-      const response = await axios.get(`http://localhost:8080/auth/me`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `https://nok-draw-backend.vercel.app/auth/me`,
+        {
+          withCredentials: true,
+        }
+      );
       dispatch(fetchUser(response.data || {}));
     } catch (error) {
       console.error(error);
@@ -61,7 +64,7 @@ export const updateUserThunk =
     try {
       console.log("UPDATEUSERTHUNK FIRING UP");
       const response = await axios.put(
-        `http://localhost:8080/api/me`,
+        `https://nok-draw-backend.vercel.app/api/me`,
         userData,
         {
           withCredentials: true,
@@ -80,7 +83,7 @@ export const signupUserThunk =
     try {
       console.log("SIGNUPUSERTHUNK FIRING UP");
       const response = await axios.post(
-        `http://localhost:8080/auth/signup`,
+        `https://nok-draw-backend.vercel.app/auth/signup`,
         userData,
         { withCredentials: true }
       );
@@ -100,7 +103,7 @@ export const loginUserThunk =
       console.log("LOGINUSERTHUNK FIRING UP");
 
       const response = await axios.post(
-        `http://localhost:8080/auth/login`,
+        `https://nok-draw-backend.vercel.app/auth/login`,
         userData,
         { withCredentials: true }
       );
@@ -118,7 +121,7 @@ export const logoutUserThunk =
     try {
       console.log("LOGOUTUSERTHUNK FIRING UP");
 
-      await axios.get(`http://localhost:8080/auth/logout`, {
+      await axios.get(`https://nok-draw-backend.vercel.app/auth/logout`, {
         withCredentials: true,
       });
       dispatch(logoutUser());
@@ -131,7 +134,7 @@ export const logoutUserThunk =
 export const deleteUserThunk =
   (): ThunkAction<void, RootState, null, AnyAction> => async (dispatch) => {
     try {
-      await axios.delete(`http://localhost:8080/api/me/`, {
+      await axios.delete(`https://nok-draw-backend.vercel.app/api/me/`, {
         withCredentials: true,
       });
       dispatch(deleteUser());
