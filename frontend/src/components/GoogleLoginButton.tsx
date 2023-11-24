@@ -15,7 +15,7 @@ const GoogleLoginButton: React.FC = () => {
   const { darkMode } = useTheme();
 
   const handleGoogleSignIn = () => {
-    window.location.href = "https://nok-draw-backend.vercel.app/auth/google/";
+    window.location.href = "https://nok-draw-backend.vercel.app/auth/google";
   };
 
   useEffect(() => {
