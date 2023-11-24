@@ -19,6 +19,7 @@ const db =
           host: process.env.POSTGRES_HOST || "localhost",
           dialect:
             "postgres" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
+          dialectModule: pg,
           logging: false,
         }
       )
