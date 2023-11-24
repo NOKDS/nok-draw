@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
+require("pg");
 // const { name } = require("../package.json");
 
 // adding user 'postgres@' removed errors for me
@@ -8,22 +9,31 @@ require("dotenv").config();
 //   logging: false,
 // });
 
-let db;
-
-if (process.env.NODE_ENV === "dev") {
-  db = new Sequelize(
-    process.env.POSTGRES_DATABASE,
-    process.env.POSTGRES_USER,
-    process.env.POSTGRES_PASSWORD,
-    {
-      host: process.env.POSTGRES_HOST || "localhost",
-      dialect: "postgres",
-      dialectModule: require("pg"),
-      logging: false,
-    }
-  );
-} else {
-  db = new Sequelize(`${process.env.POSTGRES_URL}?sslmode=require`);
-}
+const db =
+  process.env.NODE_ENV == "dev"
+    ? new Sequelize(
+        process.env.POSTGRES_DATABASE,
+        process.env.POSTGRES_USER,
+        process.env.POSTGRES_PASSWORD,
+        {
+          host: process.env.POSTGRES_HOST || "localhost",
+          dialect:
+            "postgres" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
+          dialectModule: require("pg"),
+          logging: false,
+        }
+      )
+    : new Sequelize(
+        `${
+          (process.env.POSTGRES_URL,
+          {
+            dialect: "postgres",
+            dialectModule: require("pg"),
+            dialectoptions: {
+              ssl: true,
+            },
+          })
+        }?sslmode=require`
+      );
 
 module.exports = db;
