@@ -79,7 +79,6 @@ export const signupUserThunk =
   async (dispatch) => {
     try {
       console.log("SIGNUPUSERTHUNK FIRING UP");
-      console.log(userData);
       const response = await axios.post(
         `http://localhost:8080/auth/signup`,
         userData,

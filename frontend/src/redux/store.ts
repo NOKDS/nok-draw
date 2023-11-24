@@ -13,7 +13,7 @@ const logger = createLogger({ collapsed: true });
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user", "games"],
+  whitelist: ["user"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -4,10 +4,12 @@ import GameActionTypes from "./games.types";
 interface GameState {
   game: any;
   games: any;
+  predictedDrawing?: any;
 }
 export const INITIAL_GAME_STATE: GameState = {
   game: {},
   games: [],
+  predictedDrawing: {},
 };
 
 interface GameAction {
@@ -24,6 +26,8 @@ const gameReducer: Reducer<GameState, GameAction> = (
       return { ...state, games: action.payload };
     case GameActionTypes.ADD_GAME:
       return { ...state, game: action.payload };
+    case GameActionTypes.PREDICT_DRAWING:
+      return { ...state, predictedDrawing: action.payload };
     default:
       return state;
   }

@@ -11,7 +11,7 @@ function CircularProgressWithLabel(
   const { darkMode } = useTheme();
   const seconds = Math.round(props.value / (100 / 60));
   return (
-    <Box sx={{ position: "relative", display: "inline-flex" }}>
+    <Box sx={{ position: "relative", display: "inline-flex", mb: 2 }}>
       <CircularProgress
         variant="determinate"
         size={70}
