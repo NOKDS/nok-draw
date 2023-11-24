@@ -23,14 +23,7 @@ if (process.env.NODE_ENV === "dev") {
     }
   );
 } else {
-  db = new Sequelize(process.env.POSTGRES_URL, {
-    dialect: "postgres",
-    dialectModule: require("pg"),
-    sslmode: {
-      require: true,
-      rejectUnauthorized: true,
-    },
-  });
+  db = new Sequelize(`${process.env.POSTGRES_URL}?sslmode=require`);
 }
 
 module.exports = db;
