@@ -26,9 +26,9 @@ if (process.env.NODE_ENV === "dev") {
   db = new Sequelize(process.env.POSTGRES_URL, {
     dialect: "postgres",
     dialectModule: require("pg"),
-    ssl: {
+    sslmode: {
       require: true,
-      rejectUnauthorized: false,
+      rejectUnauthorized: true,
     },
   });
 }
