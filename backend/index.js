@@ -7,8 +7,8 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
 const { User } = require("./db/models");
-const setupSocketServer = require("./wsocket")
-const http = require('http')
+const setupSocketServer = require("./wsocket");
+const http = require("http");
 
 const app = express();
 const server = http.createServer(app);
@@ -17,8 +17,8 @@ const sessionStore = new SequelizeStore({ db });
 
 const PORT = process.env.PORT || 8080;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 app.get("/", (req, res) => {
   res.status(200).send(`Express on Vercel 🥳🤩 !!! with port ${PORT}`);
@@ -89,14 +89,14 @@ const startServer = async (app, port) => {
   await sessionStore.sync();
   await db.sync({ force: false });
   // start the websocket server as well.
-  const io = require('socket.io')(server, {
+  const io = require("socket.io")(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
+      origin: "*",
+      methods: ["GET", "POST"],
+    },
   });
 
-  setupSocketServer(io)
+  setupSocketServer(io);
 
   server.listen(port, () => console.log(`Server is on port:${port}`));
   return app;

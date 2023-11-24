@@ -19,6 +19,7 @@ const generateFakeGame = async (user) => {
 
   return {
     isWon,
+    category: "Shark",
     top3Predications: ["Dolphin", "Shark", "Bird"],
     image:
       "https://i.pinimg.com/originals/2d/98/56/2d9856de5a0d3819b0b84d7b3333d0a5.jpg",
