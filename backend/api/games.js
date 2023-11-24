@@ -4,12 +4,10 @@ const { isAuthenticated } = require("../middleware/authMiddleware");
 
 router.get("/", isAuthenticated, async (req, res, next) => {
   try {
-    console.log(req.user.id);
     const userId = req.user.id;
     const games = await Game.findAll({
       where: { UserId: userId },
     });
-
     res.status(200).json(games);
   } catch (error) {
     next(error);
