@@ -1,6 +1,5 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
-require("pg");
 // const { name } = require("../package.json");
 
 // adding user 'postgres@' removed errors for me
