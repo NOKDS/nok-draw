@@ -1,59 +1,92 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import {
-  CssBaseline,
-  IconButton,
-  Box,
-  Typography,
-  Container,
-  Button,
-} from "@mui/material";
-import { Draw, AutoFixHigh, Clear } from "@mui/icons-material";
-import { useTheme } from "../context/ThemeContext";
-import { pencilCursor, eraserCursor } from "../assets/cursors";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Box, Container, Button } from "@mui/material";
+import { RootState } from "../redux/rootReducer";
+import { AnyAction } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import { useDispatch, useSelector } from "react-redux";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 
+import { pencilCursor, eraserCursor } from "../assets/cursors";
+import { useTheme } from "../context/ThemeContext";
+import CategoryPicker from "./CategoryPicket";
+import CanvasToolBar from "./CanvasToolBar";
+import {
+  fetchGamesThunk,
+  guestPredictDrawingThunk,
+  userPredictDrawingThunk,
+} from "../redux/games/games.actions";
+
 const SinglePlayerCanvas = () => {
+  const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const { darkMode } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [shouldClearCanvas, setShouldClearCanvas] = useState(false);
-  // const [submittedDrawing, setSubmittedDrawing] = useState<string | null>(null);
-  const [timer, setTimer] = useState(10);
+  const [timer, setTimer] = useState(15);
   const [startButtonVisible, setStartButtonVisible] = useState(true);
+  const [hasSubmittedDrawing, setHasSubmittedDrawing] = useState(false);
+  const selectedCategory = useRef<string>("");
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
+  const handleCategorySelect = (category: string) => {
+    selectedCategory.current = category;
+  };
 
-    if (!canvas) return;
+  const draw = useCallback(
+    (event: MouseEvent | TouchEvent) => {
+      event.preventDefault();
+      if (timer > 0 && isDrawing) {
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
+        if (!ctx || !canvas) return;
 
-    if (!startButtonVisible) {
-      canvas.addEventListener("mousedown", startDrawing);
-      canvas.addEventListener("mouseup", stopDrawing);
-      canvas.addEventListener("mousemove", draw);
+        const rect = canvas.getBoundingClientRect();
+        let x, y;
 
-      canvas.addEventListener("touchstart", startDrawing);
-      canvas.addEventListener("touchend", stopDrawing);
-      canvas.addEventListener("touchmove", draw);
+        if (event instanceof MouseEvent) {
+          x = ((event.clientX - rect.left) / rect.width) * canvas.width;
+          y = (event.clientY / rect.height) * canvas.height;
+        } else if (event.touches && event.touches.length > 0) {
+          x =
+            ((event.touches[0].clientX - rect.left) / rect.width) *
+            canvas.width;
+          y = (event.touches[0].clientY / rect.height) * canvas.height;
+        } else {
+          return;
+        }
 
-      return () => {
-        canvas.removeEventListener("mousedown", startDrawing);
-        canvas.removeEventListener("mouseup", stopDrawing);
-        canvas.removeEventListener("mousemove", draw);
+        ctx.lineWidth = isErasing ? 20 : 5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      }
+    },
+    [isDrawing, isErasing, timer]
+  );
 
-        canvas.addEventListener("touchstart", startDrawing);
-        canvas.addEventListener("touchend", stopDrawing);
-        canvas.addEventListener("touchmove", draw);
-      };
-    }
-  }, [isDrawing, startButtonVisible]);
+  const clearCanvas = useCallback(() => {
+    setShouldClearCanvas(true);
+  }, []);
 
-  const startTimerAndHideButton = () => {
+  const startDrawingHandler = useCallback(() => {
+    if (timer > 0) setIsDrawing(true);
+  }, [timer]);
+
+  const stopDrawingHandler = useCallback(() => {
+    setIsDrawing(false);
+    const ctx = canvasRef.current?.getContext("2d");
+    if (ctx) ctx.beginPath();
+  }, []);
+
+  const startTimerAndHideButton = useCallback(() => {
     setStartButtonVisible(false);
-
     const countdown = setInterval(() => {
       setTimer((prevTimer) => {
-        if (prevTimer === 1) {
+        if (prevTimer === 0) {
           clearInterval(countdown);
           submitDrawing();
           clearCanvas();
@@ -62,19 +95,40 @@ const SinglePlayerCanvas = () => {
         return prevTimer - 1;
       });
     }, 1000);
-  };
+  }, [clearCanvas]);
 
-  const startDrawing = useCallback(() => setIsDrawing(true), []);
-  const stopDrawing = useCallback(() => {
-    setIsDrawing(false);
-    const ctx = canvasRef.current?.getContext("2d");
-    if (ctx) ctx.beginPath();
-  }, []);
+  const submitDrawing = async () => {
+    if (hasSubmittedDrawing) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const imageData = canvas.toDataURL();
+    const roomName = "hi";
+    const userId = "1";
+    const data = {
+      canvas_data: imageData,
+      room_name: roomName,
+      user_id: userId,
+      category: selectedCategory.current,
+    };
+    try {
+      setHasSubmittedDrawing(true);
+      let response;
+      if (isLoggedIn) {
+        response = await dispatch(userPredictDrawingThunk(data));
+        await dispatch(fetchGamesThunk());
+      } else {
+        response = await dispatch(guestPredictDrawingThunk(data));
+      }
+      console.log(response);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
-    if (canvas === null) return;
+    if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -82,11 +136,13 @@ const SinglePlayerCanvas = () => {
     ctx.globalCompositeOperation = isErasing
       ? "destination-out"
       : "source-over";
+    return () => {
+      ctx.globalCompositeOperation = "source-over";
+    };
   }, [isErasing]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-
     if (canvas === null) return;
 
     const ctx = canvas.getContext("2d");
@@ -98,121 +154,45 @@ const SinglePlayerCanvas = () => {
     }
   }, [shouldClearCanvas]);
 
-  const draw = useCallback(
-    (event: MouseEvent | TouchEvent) => {
-      event.preventDefault();
-      if (!isDrawing) return;
-
-      const canvas = canvasRef.current;
-      const ctx = canvas?.getContext("2d");
-      if (!ctx || !canvas) return;
-      const rect = canvas.getBoundingClientRect();
-
-      let x, y;
-
-      if (event instanceof MouseEvent) {
-        x = ((event.clientX - rect.left) / rect.width) * canvas.width;
-        y = (event.clientY / rect.height) * canvas.height;
-      } else if (event.touches && event.touches.length > 0) {
-        x =
-          ((event.touches[0].clientX - rect.left) / rect.width) * canvas.width;
-        y = (event.touches[0].clientY / rect.height) * canvas.height;
-      } else {
-        return;
-      }
-      ctx.lineWidth = isErasing ? 20 : 5;
-      ctx.lineCap = "round";
-      ctx.lineJoin = "round";
-      ctx.lineTo(x, y);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-    },
-    [isDrawing, isErasing]
-  );
-
-  const clearCanvas = () => {
-    setShouldClearCanvas(true);
-  };
-
-  // const resizeImage = (image: HTMLImageElement, newSize: number): string => {
-  //   const canvas = document.createElement("canvas");
-  //   const ctx = canvas.getContext("2d");
-
-  //   if (!ctx) {
-  //     throw new Error("Unable to get 2D context");
-  //   }
-
-  //   const { width, height } = image;
-  //   canvas.width = newSize;
-  //   canvas.height = newSize;
-  //   const scaleFactor = newSize / Math.max(width, height);
-  //   const newWidth = width * scaleFactor;
-  //   const newHeight = height * scaleFactor;
-  //   const xOffset = (newSize - newWidth) / 2;
-  //   const yOffset = (newSize - newHeight) / 2;
-  //   ctx.drawImage(image, xOffset, yOffset, newWidth, newHeight);
-  //   return canvas.toDataURL();
-  // };
-
-  // const shortenDataURL = (dataURL: string) => {
-  //   const base64Data = dataURL.split(",")[1];
-  //   const binaryData = atob(base64Data);
-  //   const uint8Array = new Uint8Array(binaryData.length);
-  //   for (let i = 0; i < binaryData.length; i++) {
-  //     uint8Array[i] = binaryData.charCodeAt(i);
-  //   }
-
-  //   const compressedBase64 = btoa(
-  //     String.fromCharCode.apply(null, Array.from(uint8Array))
-  //   );
-  //   const shortenedDataURL = `data:image/png;base64,${compressedBase64}`;
-  //   return shortenedDataURL;
-  // };
-
-  // const submitDrawing = () => {
-  //   const canvas = canvasRef.current;
-  //   if (canvas) {
-  //     const imageData = canvas.toDataURL();
-  //     const tempImage = new Image();
-  //     tempImage.src = imageData;
-
-  //     tempImage.onload = () => {
-  //       try {
-  //         const resizedImageData = resizeImage(tempImage, 28);
-  //         const shortenedImageData = shortenDataURL(resizedImageData);
-  //         console.log("Resized and Shortened Image Data:", shortenedImageData);
-  //         setSubmittedDrawing(shortenedImageData);
-  //       } catch (error) {
-  //         console.error("Error during image resizing:", error);
-  //       }
-  //     };
-  //   }
-  // };
-  const submitDrawing = () => {
+  useEffect(() => {
     const canvas = canvasRef.current;
-    if (canvas) {
-      const imageData = canvas.toDataURL();
-      const roomName = "hi";
-      const userId = "1";
-      const data = {
-        canvas_data: imageData,
-        room_name: roomName,
-        user_id: userId,
-      };
+    if (!canvas) return;
 
-      fetch("http://localhost:5000/predict", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-        .catch((error) => console.error("Error:", error));
-    }
-  };
+    const startDrawing = () => {
+      startDrawingHandler();
+      canvas.removeEventListener("mousedown", startDrawing);
+      canvas.removeEventListener("touchstart", startDrawing);
+    };
+
+    const stopDrawing = () => {
+      stopDrawingHandler();
+      canvas.removeEventListener("mouseup", stopDrawing);
+      canvas.removeEventListener("touchend", stopDrawing);
+    };
+
+    const handleDraw = (event: MouseEvent | TouchEvent) => {
+      event.preventDefault();
+      draw(event);
+    };
+
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mousemove", handleDraw);
+
+    canvas.addEventListener("touchstart", startDrawing);
+    canvas.addEventListener("touchend", stopDrawing);
+    canvas.addEventListener("touchmove", handleDraw);
+
+    return () => {
+      canvas.removeEventListener("mousedown", startDrawing);
+      canvas.removeEventListener("mouseup", stopDrawing);
+      canvas.removeEventListener("mousemove", handleDraw);
+
+      canvas.removeEventListener("touchstart", startDrawing);
+      canvas.removeEventListener("touchend", stopDrawing);
+      canvas.removeEventListener("touchmove", handleDraw);
+    };
+  }, [startDrawingHandler, stopDrawingHandler, draw]);
 
   return (
     <Container
@@ -223,7 +203,6 @@ const SinglePlayerCanvas = () => {
         justifyContent: "center",
       }}
     >
-      <CssBaseline />
       {startButtonVisible && (
         <Button
           sx={{
@@ -253,87 +232,19 @@ const SinglePlayerCanvas = () => {
       )}
       {!startButtonVisible && (
         <>
-          <Box sx={{ mt: 3, zIndex: 2 }}>
+          <Box sx={{ mt: 3, zIndex: 1 }}>
             <CircularProgressWithLabel value={(timer / 60) * 100} />
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 3,
-              zIndex: 2,
-              mt: 1,
-            }}
-          >
-            <Button
-              onClick={() => setIsErasing(true)}
-              sx={{
-                "&:hover": { backgroundColor: "transparent" },
-              }}
-              disableTouchRipple
-            >
-              <IconButton
-                color={
-                  isErasing ? (darkMode ? "secondary" : "primary") : "default"
-                }
-                size="large"
-              >
-                <AutoFixHigh sx={{ mb: 1.5 }} />
-              </IconButton>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: darkMode ? "white" : "black",
-                }}
-              >
-                Eraser
-              </Typography>
-            </Button>
-
-            <Button
-              onClick={() => setIsErasing(false)}
-              sx={{
-                "&:hover": { backgroundColor: "transparent" },
-              }}
-              disableTouchRipple
-            >
-              <IconButton
-                color={
-                  isErasing ? "default" : darkMode ? "secondary" : "primary"
-                }
-                size="large"
-              >
-                <Draw sx={{ mb: 1 }} />
-              </IconButton>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: darkMode ? "white" : "black",
-                }}
-              >
-                Pencil
-              </Typography>
-            </Button>
-
-            <Button
-              onClick={clearCanvas}
-              sx={{
-                "&:hover": { backgroundColor: "transparent" },
-              }}
-              disableTouchRipple
-            >
-              <IconButton color={darkMode ? "error" : "warning"} size="large">
-                <Clear sx={{ mb: 0.5 }} />
-              </IconButton>
-              <Typography
-                variant="caption"
-                sx={{
-                  color: darkMode ? "white" : "black",
-                }}
-              >
-                Clear
-              </Typography>
-            </Button>
+          <Box sx={{ zIndex: 1 }}>
+            <CategoryPicker onSelectCategory={handleCategorySelect} />
+          </Box>
+          <Box sx={{ zIndex: 1 }}>
+            <CanvasToolBar
+              isErasing={isErasing}
+              darkMode={darkMode}
+              setIsErasing={setIsErasing}
+              clearCanvas={clearCanvas}
+            />
           </Box>
         </>
       )}
