@@ -45,10 +45,16 @@ const configSession = () => ({
   resave: false,
   saveUninitialized: false,
   proxy: true,
+  // cookie: {
+  //   maxAge: 8 * 60 * 60 * 1000,
+  //   httpOnly: true,
+  //   path: "/",
+  // },
   cookie: {
     maxAge: 8 * 60 * 60 * 1000,
     httpOnly: true,
-    path: "/",
+    secure: process.env.NODE_ENV == "dev" ? false : true,
+    sameSite: process.env.NODE_ENV == "dev" ? false : "none",
   },
 });
 
@@ -88,7 +94,6 @@ const setupRoutes = (app) => {
 const startServer = async (app, port) => {
   await sessionStore.sync();
   await db.sync({ force: false });
-  // start the websocket server as well.
   const io = require("socket.io")(server, {
     cors: {
       origin: "*",

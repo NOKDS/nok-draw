@@ -39,8 +39,8 @@ router.get(
 router.get(
   "/callback",
   passport.authenticate("google", {
-    failureRedirect: `http://localhost:3000/login`,
-    successRedirect: `http://localhost:3000/login?googleSignInSuccess=true`,
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
+    successRedirect: `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`,
   })
   // async (req, res) => {
   //   console.log("Google authentication successful");

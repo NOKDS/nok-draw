@@ -31,7 +31,6 @@ router.post("/", async (req, res) => {
         UserId: req.user.id,
       });
       try {
-        const totalGames = await Game.count({ where: { UserId: req.user.id } });
       } catch (error) {
         console.error("Error:", error.message);
       }
