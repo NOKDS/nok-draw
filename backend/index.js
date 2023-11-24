@@ -1,17 +1,17 @@
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
 const db = require("./db");
 const cors = require("cors");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
 const { User } = require("./db/models");
-const setupSocketServer = require("./wsocket");
-const http = require("http");
+// const setupSocketServer = require("./wsocket");
+// const http = require("http");
 
 const app = express();
-const server = http.createServer(app);
+
+// const server = http.createServer(app);
 
 const sessionStore = new SequelizeStore({ db });
 
@@ -94,12 +94,12 @@ const setupRoutes = (app) => {
 const startServer = async (app, port) => {
   await sessionStore.sync();
   await db.sync({ force: false });
-  const io = require("socket.io")(server, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
-    },
-  });
+  // const io = require("socket.io")(server, {
+  //   cors: {
+  //     origin: "*",
+  //     methods: ["GET", "POST"],
+  //   },
+  // });
 
   setupSocketServer(io);
 
