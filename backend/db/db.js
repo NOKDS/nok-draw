@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "dev") {
     dialectModule: require("pg"),
     ssl: {
       require: true,
-      rejectUnauthorized: true,
+      rejectUnauthorized: false,
     },
   });
 }
