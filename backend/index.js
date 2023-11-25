@@ -69,8 +69,8 @@ const configSession = () => ({
   cookie: {
     maxAge: 8 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: process.env.NODE_ENV == "dev" ? false : true,
-    sameSite: process.env.NODE_ENV == "dev" ? false : "none",
+    secure: true,
+    sameSite: "none",
   },
 });
 
@@ -83,7 +83,7 @@ const setupMiddleware = (app) => {
       allowedHeaders:
         "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
       preflightContinue: true,
-      // optionsSuccessStatus: 204,
+      optionsSuccessStatus: 204,
     })
   );
 
