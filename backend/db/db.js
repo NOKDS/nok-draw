@@ -10,7 +10,7 @@ require("pg");
 // });
 
 const db =
-  process.env.NODE_ENV == "dev"
+  process.env.NODE_ENV === "dev"
     ? new Sequelize(
         process.env.POSTGRES_DATABASE,
         process.env.POSTGRES_USER,
@@ -19,23 +19,25 @@ const db =
           host: process.env.POSTGRES_HOST || "localhost",
           dialect: "postgres",
           dialectModule: require("pg"),
+          dialectOptions: {
+            ssl: {
+              require: true,
+              rejectUnauthorized: true,
+            },
+          },
           logging: false,
         }
       )
-    : new Sequelize(
-        `${
-          (process.env.POSTGRES_URL,
-          {
-            dialect: "postgres",
-            dialectModule: require("pg"),
-            dialectoptions: {
-              ssl: {
-                require: false,
-                rejectUnauthorized: true,
-              },
-            },
-          })
-        }?sslmode=require`
-      );
+    : new Sequelize(process.env.POSTGRES_URL, {
+        dialect: "postgres",
+        dialectModule: require("pg"),
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: true,
+          },
+        },
+        logging: false,
+      });
 
 module.exports = db;
