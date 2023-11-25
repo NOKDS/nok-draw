@@ -7,7 +7,6 @@ router.get("/", isAuthenticated, (req, res, next) => {
     if (error) {
       return next(error);
     }
-    console.log(req);
     req.session.destroy((error) => {
       if (error) {
         console.error("Error occurred during logout:", error);
