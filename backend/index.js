@@ -6,12 +6,19 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
 const { User } = require("./db/models");
-// const setupSocketServer = require("./wsocket");
-// const http = require("http");
+const setupSocketServer = require("./wsocket");
+const http = require("http");
 
 const app = express();
 
-// const server = http.createServer(app);
+const server = http.createServer(app);
+
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 const sessionStore = new SequelizeStore({ db });
 
@@ -67,6 +74,7 @@ const setupMiddleware = (app) => {
       allowedHeaders:
         "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
       preflightContinue: true,
+      optionsSuccessStatus: 204,
     })
   );
 
@@ -94,12 +102,6 @@ const setupRoutes = (app) => {
 const startServer = async (app, port) => {
   await sessionStore.sync();
   await db.sync({ force: false });
-  // const io = require("socket.io")(server, {
-  //   cors: {
-  //     origin: "*",
-  //     methods: ["GET", "POST"],
-  //   },
-  // });
 
   setupSocketServer(io);
 
