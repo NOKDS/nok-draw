@@ -17,8 +17,7 @@ const db =
         process.env.POSTGRES_PASSWORD,
         {
           host: process.env.POSTGRES_HOST || "localhost",
-          dialect:
-            "postgres" /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
+          dialect: "postgres",
           dialectModule: require("pg"),
           logging: false,
         }
@@ -30,7 +29,10 @@ const db =
             dialect: "postgres",
             dialectModule: require("pg"),
             dialectoptions: {
-              ssl: true,
+              ssl: {
+                require: false,
+                rejectUnauthorized: true,
+              },
             },
           })
         }?sslmode=require`
