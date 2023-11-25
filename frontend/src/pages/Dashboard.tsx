@@ -34,34 +34,34 @@ const Dashboard: React.FC = () => {
   };
 
   const fetchData = useCallback(async () => {
-    try {
-      const cachedUser = localStorage.getItem("cachedUser");
-      const cachedGames = localStorage.getItem("cachedGames");
-      if (cachedUser) {
-        const parsedCachedUser = JSON.parse(cachedUser);
-        if (!user || parsedCachedUser.id !== user.id) {
-          await dispatch(fetchUserThunk());
-        }
-      } else {
-        await dispatch(fetchUserThunk());
-      }
+    // try {
+    //   const cachedUser = localStorage.getItem("cachedUser");
+    //   const cachedGames = localStorage.getItem("cachedGames");
+    //   if (cachedUser) {
+    //     const parsedCachedUser = JSON.parse(cachedUser);
+    //     if (!user || parsedCachedUser.id !== user.id) {
+    //       await dispatch(fetchUserThunk());
+    //     }
+    //   } else {
+    await dispatch(fetchUserThunk());
+    // }
 
-      if (user && cachedGames) {
-        const parsedCachedGames = JSON.parse(cachedGames);
-        if (
-          !games ||
-          JSON.stringify(parsedCachedGames) !== JSON.stringify(games)
-        ) {
-          // if (!games || parsedCachedGames.createdAt !== games[0]?.createdAt) {
-          await dispatch(fetchGamesThunk());
-        }
-      } else {
-        await dispatch(fetchGamesThunk());
-      }
-    } catch (error) {
-      console.error("Error fetching user or games:", error);
-    }
-  }, [dispatch, user, games]);
+    // if (user && cachedGames) {
+    //   const parsedCachedGames = JSON.parse(cachedGames);
+    //   if (
+    //     !games ||
+    //     JSON.stringify(parsedCachedGames) !== JSON.stringify(games)
+    //   ) {
+    //     // if (!games || parsedCachedGames.createdAt !== games[0]?.createdAt) {
+    //     await dispatch(fetchGamesThunk());
+    //   }
+    // } else {
+    await dispatch(fetchGamesThunk());
+    //   }
+    // } catch (error) {
+    //   console.error("Error fetching user or games:", error);
+    // }
+  }, []);
 
   useEffect(() => {
     fetchData();
