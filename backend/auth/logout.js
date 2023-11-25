@@ -1,15 +1,13 @@
+const { isAuthenticated } = require("../middleware/authMiddleware");
+
 const router = require("express").Router();
 
-router.get("/", (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: "Not authenticated" });
-  }
-  // const user = req.user.dataValues.username;
+router.get("/", isAuthenticated, (req, res, next) => {
   req.logout((error) => {
     if (error) {
       return next(error);
     }
-
+    console.log(req);
     req.session.destroy((error) => {
       if (error) {
         console.error("Error occurred during logout:", error);
@@ -18,7 +16,7 @@ router.get("/", (req, res, next) => {
           .json({ error: "An error occurred during logout" });
       }
 
-      console.log(`${user} logged out successfully`);
+      // console.log(`${user} logged out successfully`);
       res.status(200).json({ message: "Logged out successfully" });
     });
   });
