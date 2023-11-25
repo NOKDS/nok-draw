@@ -41,31 +41,40 @@ router.get(
   passport.authenticate("google", {
     failureRedirect: `${process.env.FRONTEND_URL}/login`,
     successRedirect: `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`,
-  })
-  // async (req, res) => {
-  //   console.log("Google authentication successful");
-  //   const user = await User.findOne({
-  //     where: { email: req.user.dataValues.email },
-  //   });
+  }),
+  async (req, res) => {
+    try {
+      const user = await User.findOne({
+        where: { email: req.user.dataValues.email },
+      });
 
-  //   req.login(user, (err) => {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     console.log(`Logged in as ${user.username}`);
-  //     const userData = {
-  //       name: user.name,
-  //       username: user.username,
-  //       email: user.email,
-  //       createdAt: user.createdAt,
-  //       updatedAt: user.updatedAt,
-  //       image: user.image,
-  //     };
-  //     req.session.save(() => {
-  //       return res.status(200).json(userData);
-  //     });
-  //   });
-  // }
+      if (!user) {
+        return res.status(401).json({ error: "User not found" });
+      }
+
+      req.login(user, (err) => {
+        if (err) {
+          return res.status(500).json({ error: "Login failed" });
+        }
+
+        const userData = {
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          image: user.image,
+        };
+
+        req.session.save(() => {
+          return res.status(200).json(userData);
+        });
+      });
+    } catch (error) {
+      console.error("Google authentication error:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  }
 );
 
 module.exports = router;

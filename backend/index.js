@@ -5,10 +5,9 @@ const cors = require("cors");
 const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
-const { User } = require("./db/models");
 const setupSocketServer = require("./wsocket");
 const http = require("http");
-
+const { User } = require("./db/models");
 const app = express();
 
 const server = http.createServer(app);
@@ -26,6 +25,16 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+app.use((req, res, next) => {
+  console.log(`Received request: ${req.method} ${req.url}`);
+  next();
+});
+
+app.use("/api", (req, res, next) => {
+  console.log(`API request: ${req.method} ${req.url}`);
+  next();
+});
 
 app.get("/", (req, res) => {
   res.status(200).send(`Express on Vercel 🥳🤩 !!! with port ${PORT}`);
@@ -74,7 +83,7 @@ const setupMiddleware = (app) => {
       allowedHeaders:
         "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
       preflightContinue: true,
-      optionsSuccessStatus: 204,
+      // optionsSuccessStatus: 204,
     })
   );
 
