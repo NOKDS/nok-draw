@@ -40,7 +40,7 @@ router.get(
   "/callback",
   passport.authenticate("google", {
     failureRedirect: `${process.env.FRONTEND_URL}/login`,
-    successRedirect: `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`,
+    // successRedirect: `${process.env.FRONTEND_URL}/dashboard?googleSignInSuccess=true`,
   }),
   async (req, res) => {
     try {
@@ -57,17 +57,19 @@ router.get(
           return res.status(500).json({ error: "Login failed" });
         }
 
-        const userData = {
-          name: user.name,
-          username: user.username,
-          email: user.email,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-          image: user.image,
-        };
+        // const userData = {
+        //   name: user.name,
+        //   username: user.username,
+        //   email: user.email,
+        //   createdAt: user.createdAt,
+        //   updatedAt: user.updatedAt,
+        //   image: user.image,
+        // };
 
         req.session.save(() => {
-          return res.status(200).json(userData);
+          res.redirect(
+            `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`
+          );
         });
       });
     } catch (error) {
