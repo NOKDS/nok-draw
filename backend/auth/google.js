@@ -54,6 +54,7 @@ router.get(
 
       req.login(user, (err) => {
         if (err) {
+          console.error("Error creating session:", err);
           return res.status(500).json({ error: "Login failed" });
         }
 
@@ -66,7 +67,11 @@ router.get(
         //   image: user.image,
         // };
 
-        req.session.save(() => {
+        req.session.save((err) => {
+          if (err) {
+            return res.status(500).json({ error: "Session save failed" });
+          }
+
           res.redirect(
             `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`
           );
