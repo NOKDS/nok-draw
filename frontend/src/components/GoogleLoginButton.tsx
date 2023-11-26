@@ -26,7 +26,7 @@ const GoogleLoginButton: React.FC = () => {
         try {
           await dispatch(setLoginStatus(true));
           const response = await fetch(
-            "http://nok-draw-backend.vercel.app/auth/me",
+            "https://nok-draw-backend.vercel.app/auth/me",
             {
               method: "GET",
               credentials: "include",
