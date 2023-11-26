@@ -16,7 +16,7 @@ const GoogleLoginButton: React.FC = () => {
   const handleGoogleSignIn = () => {
     //window.location.href = "https://nok-draw-backend.vercel.app/auth/google";
     //window.location.href = "http://localhost:8080/auth/google";
-    window.open("http://localhost:8080/auth/google", "_self");
+    window.open("https://nok-draw-backend.vercel.app/auth/google", "_self");
   };
 
   useEffect(() => {
