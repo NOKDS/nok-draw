@@ -25,10 +25,13 @@ const GoogleLoginButton: React.FC = () => {
       if (urlParams.get("googleSignInSuccess")) {
         try {
           await dispatch(setLoginStatus(true));
-          const response = await fetch("http://localhost:8080/auth/me", {
-            method: "GET",
-            credentials: "include",
-          });
+          const response = await fetch(
+            "http://nok-draw-backend.vercel.app/auth/me",
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
 
           if (response.ok) {
             const userData = await response.json();
