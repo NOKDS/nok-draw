@@ -7,7 +7,6 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
 import { useNavigate } from "react-router-dom";
-import { fetchGamesThunk } from "../redux/games/games.actions";
 
 const GoogleLoginButton: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -15,19 +14,35 @@ const GoogleLoginButton: React.FC = () => {
   const { darkMode } = useTheme();
 
   const handleGoogleSignIn = () => {
-    window.location.href = "https://nok-draw-backend.vercel.app/auth/google";
+    //window.location.href = "https://nok-draw-backend.vercel.app/auth/google";
+    //window.location.href = "http://localhost:8080/auth/google";
+    window.open("http://localhost:8080/auth/google", "_self");
   };
 
   useEffect(() => {
     const handleGoogleSignInCallback = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("googleSignInSuccess")) {
-        await dispatch(setLoginStatus(true));
-        // await dispatch(fetchUserThunk());
-        // await dispatch(fetchGamesThunk());
-        navigate("/dashboard");
+        try {
+          await dispatch(setLoginStatus(true));
+          const response = await fetch("http://localhost:8080/auth/me", {
+            method: "GET",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            console.log("User information:", userData);
+            navigate("/dashboard");
+          } else {
+            console.log("Failed to check authentication status");
+          }
+        } catch (error) {
+          console.error("Error fetching /auth/me:", error);
+        }
       }
     };
+
     handleGoogleSignInCallback();
   }, [dispatch, navigate]);
 
