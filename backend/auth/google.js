@@ -40,48 +40,48 @@ router.get(
   "/callback",
   passport.authenticate("google", {
     failureRedirect: `${process.env.FRONTEND_URL}/login`,
-    // successRedirect: `${process.env.FRONTEND_URL}/dashboard?googleSignInSuccess=true`,
-  }),
-  async (req, res) => {
-    try {
-      const user = await User.findOne({
-        where: { email: req.user.dataValues.email },
-      });
+    successRedirect: `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`,
+  })
+  // async (req, res) => {
+  //   try {
+  //     const user = await User.findOne({
+  //       where: { email: req.user.dataValues.email },
+  //     });
 
-      if (!user) {
-        return res.status(401).json({ error: "User not found" });
-      }
+  //     if (!user) {
+  //       return res.status(401).json({ error: "User not found" });
+  //     }
 
-      req.login(user, (err) => {
-        if (err) {
-          console.error("Error creating session:", err);
-          return res.status(500).json({ error: "Login failed" });
-        }
+  //     req.login(user, (err) => {
+  //       if (err) {
+  //         console.error("Error creating session:", err);
+  //         return res.status(500).json({ error: "Login failed" });
+  //       }
 
-        // const userData = {
-        //   name: user.name,
-        //   username: user.username,
-        //   email: user.email,
-        //   createdAt: user.createdAt,
-        //   updatedAt: user.updatedAt,
-        //   image: user.image,
-        // };
+  //       // const userData = {
+  //       //   name: user.name,
+  //       //   username: user.username,
+  //       //   email: user.email,
+  //       //   createdAt: user.createdAt,
+  //       //   updatedAt: user.updatedAt,
+  //       //   image: user.image,
+  //       // };
 
-        req.session.save((err) => {
-          if (err) {
-            return res.status(500).json({ error: "Session save failed" });
-          }
+  //       req.session.save((err) => {
+  //         if (err) {
+  //           return res.status(500).json({ error: "Session save failed" });
+  //         }
 
-          res.redirect(
-            `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`
-          );
-        });
-      });
-    } catch (error) {
-      console.error("Google authentication error:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
+  //         res.redirect(
+  //           `${process.env.FRONTEND_URL}/login?googleSignInSuccess=true`
+  //         );
+  //       });
+  //     });
+  //   } catch (error) {
+  //     console.error("Google authentication error:", error);
+  //     res.status(500).json({ error: "Internal server error" });
+  //   }
+  // }
 );
 
 module.exports = router;
