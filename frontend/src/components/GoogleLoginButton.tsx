@@ -16,6 +16,7 @@ const GoogleLoginButton: React.FC = () => {
   const handleGoogleSignIn = () => {
     //window.location.href = "https://nok-draw-backend.vercel.app/auth/google";
     //window.location.href = "http://localhost:8080/auth/google";
+    // window.open("http://localhost:8080/auth/google", "_self");
     window.open("https://nok-draw-backend.vercel.app/auth/google", "_self");
   };
 
@@ -23,29 +24,12 @@ const GoogleLoginButton: React.FC = () => {
     const handleGoogleSignInCallback = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("googleSignInSuccess")) {
-        try {
-          await dispatch(setLoginStatus(true));
-          const response = await fetch(
-            "https://nok-draw-backend.vercel.app/auth/me",
-            {
-              method: "GET",
-              credentials: "include",
-            }
-          );
-
-          if (response.ok) {
-            const userData = await response.json();
-            console.log("User information:", userData);
-            navigate("/dashboard");
-          } else {
-            console.log("Failed to check authentication status");
-          }
-        } catch (error) {
-          console.error("Error fetching /auth/me:", error);
-        }
+        await dispatch(setLoginStatus(true));
+        await dispatch(fetchUserThunk());
+        // await dispatch(fetchGamesThunk());
       }
+      navigate("/dashboard");
     };
-
     handleGoogleSignInCallback();
   }, [dispatch, navigate]);
 
