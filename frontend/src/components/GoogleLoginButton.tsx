@@ -25,10 +25,10 @@ const GoogleLoginButton: React.FC = () => {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("googleSignInSuccess")) {
         await dispatch(setLoginStatus(true));
-        await dispatch(fetchUserThunk());
+        // await dispatch(fetchUserThunk());
         // await dispatch(fetchGamesThunk());
+        navigate("/dashboard");
       }
-      navigate("/dashboard");
     };
     handleGoogleSignInCallback();
   }, [dispatch, navigate]);
