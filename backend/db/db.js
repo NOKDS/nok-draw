@@ -31,12 +31,12 @@ const db =
     : new Sequelize(process.env.POSTGRES_URL, {
         dialect: "postgres",
         dialectModule: require("pg"),
-        dialectOptions: {
-          ssl: {
-            require: true,
-            rejectUnauthorized: true,
-          },
-        },
+        // dialectOptions: {
+        //   ssl: {
+        //     require: true,
+        //     rejectUnauthorized: true,
+        //   },
+        // },
         logging: false,
       });
 

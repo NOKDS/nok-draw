@@ -31,17 +31,45 @@ class UserCanvas {
     }
 
     // update canvas from received base64 data
-    public updateCanvasFromData(base64Data: string) {
-        const ctx = this.getCtx();
-        // if context exits, draw the image onto the canvas
-        if (ctx) {
-            let img = new Image();
-            img.onload = () => {
-                ctx.drawImage(img, 0, 0);
-            };
-            img.src = base64Data;
+public updateCanvasFromData(base64Data: string, targetWidth: number, targetHeight: number) {
+    const ctx = this.getCtx();
+    // if context exists, draw the image onto the canvas
+    if (ctx) {
+        let img = new Image();
+        img.onload = () => {
+            // Clear the canvas in case there's something already drawn on it
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            
+            // Draw the image at the desired size (100x100 in your case)
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+        };
+        img.src = base64Data;
     } 
-    }
+  }
+
+  public drawImageToCanvas(base64Data: string, startWidth: number, startHeight: number, targetWidth: number, targetHeight: number) {
+    const ctx = this.getCtx();
+    // if context exists, draw the image onto the canvas
+    if (ctx) {
+        let img = new Image();
+        img.onload = () => {
+            // Draw the image at the desired size (100x100 in your case)
+            ctx.drawImage(img, startWidth, startHeight, targetWidth, targetHeight);
+        };
+        img.src = base64Data;
+    } 
+  }
+
+    public initializeContext() {
+        const ctx = this.getCtx();
+        if (ctx) {
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = "black";
+        ctx.lineCap = "round";
+        ctx.fillStyle = "white";
+        // ... any other initial properties
+        }
+  }
 }
 
 export default UserCanvas;
