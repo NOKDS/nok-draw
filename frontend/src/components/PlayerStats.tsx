@@ -1,8 +1,9 @@
 import React from "react";
-import { Paper, Typography } from "@mui/material";
+import { Divider, Paper, Typography } from "@mui/material";
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from "@mui/system";
+import Chart from "../components/Chart";
 
 interface Game {
   id: number;
@@ -16,7 +17,7 @@ interface PlayerStatsProps {
 }
 
 const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
-  const { darkMode } = useTheme();
+  const theme = useTheme();
 
   const stats = games.reduce(
     (acc, game) => {
@@ -33,22 +34,31 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
   return (
     <>
       <Paper
+        elevation={4}
         sx={{
-          p: 2,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          padding: theme.spacing(1),
+          textAlign: "center",
           borderRadius: "1rem",
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-          backgroundColor: darkMode ? "inherit" : "beige",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          position: "relative",
+          overflow: "hidden",
+          height: "100%",
         }}
       >
-        <Typography variant="h5" sx={{ color: "#007BFF", marginBottom: 2 }}>
+        <Typography
+          variant="h5"
+          sx={{ color: "#007BFF", marginBottom: theme.spacing(2) }}
+        >
           Player Stats
         </Typography>
+        <Divider sx={{ width: "100%", marginY: theme.spacing(2) }} />
+
         <Typography
           variant="body1"
-          sx={{ fontSize: "1.1rem", marginBottom: 1 }}
+          sx={{
+            fontSize: { xs: "1rem", md: "1.1rem" },
+            marginBottom: theme.spacing(1),
+          }}
         >
           Games Played: {games.length}
         </Typography>
@@ -57,7 +67,7 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
             display: "flex",
             justifyContent: "space-between",
             width: "100%",
-            marginBottom: 1,
+            marginBottom: theme.spacing(1),
           }}
         >
           <div
@@ -65,10 +75,21 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
               display: "flex",
               alignItems: "center",
               color: "green",
+              marginBottom: theme.spacing(1),
             }}
           >
-            <SentimentVerySatisfiedIcon sx={{ marginRight: 1 }} />
-            <Typography variant="body1" sx={{ fontSize: "18px" }}>
+            <SentimentVerySatisfiedIcon
+              sx={{
+                marginRight: theme.spacing(1),
+                marginLeft: theme.spacing(1),
+              }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: { xs: "16px", md: "18px" },
+              }}
+            >
               Wins: {stats.wins}
             </Typography>
           </div>
@@ -79,12 +100,21 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
               color: "red",
             }}
           >
-            <SentimentVeryDissatisfiedIcon sx={{ marginRight: 1 }} />
-            <Typography variant="body1" sx={{ fontSize: "18px" }}>
+            <SentimentVeryDissatisfiedIcon
+              sx={{ marginRight: theme.spacing(1) }}
+            />
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: { xs: "16px", md: "18px" },
+                marginRight: theme.spacing(1),
+              }}
+            >
               Losses: {stats.losses}
             </Typography>
           </div>
         </div>
+        <Chart games={games} />
       </Paper>
     </>
   );

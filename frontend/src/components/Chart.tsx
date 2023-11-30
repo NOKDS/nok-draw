@@ -1,69 +1,100 @@
-import * as React from "react";
-import { useTheme } from "@mui/material/styles";
+import React from "react";
+import { Bar } from "react-chartjs-2";
 import {
-  LineChart,
-  XAxis,
-  YAxis,
-  Label,
-  ResponsiveContainer,
-  Line,
-} from "recharts";
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-function createData(time: string, amount?: number) {
-  return { time, amount };
+interface Game {
+  id: number;
+  isWon: boolean;
+  top3Predications: string;
+  createdAt: string;
 }
 
-const data = [
-  createData("00:00", 0),
-  createData("03:00", 300),
-  createData("06:00", 600),
-  createData("09:00", 800),
-  createData("12:00", 1500),
-  createData("15:00", 2000),
-  createData("18:00", 2400),
-  createData("21:00", 2400),
-  createData("24:00", undefined),
-];
-
-export default function Chart() {
-  const theme = useTheme();
-
-  return (
-    <React.Fragment>
-      {/* <Title>Today</Title> */}
-      <ResponsiveContainer>
-        <LineChart
-          data={data}
-          margin={{
-            top: 16,
-            right: 16,
-            bottom: 0,
-            left: 24,
-          }}
-        >
-          <XAxis
-            dataKey="time"
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          />
-          <YAxis
-            stroke={theme.palette.text.secondary}
-            style={theme.typography.body2}
-          >
-            <Label
-              angle={270}
-              position="left"
-              style={{
-                textAnchor: "middle",
-                fill: theme.palette.text.primary,
-                ...theme.typography.body1,
-              }}
-            >
-              Sales ($)
-            </Label>
-          </YAxis>
-        </LineChart>
-      </ResponsiveContainer>
-    </React.Fragment>
-  );
+interface ChartProps {
+  games: Game[];
 }
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const options = {
+  responsive: true,
+  // maintainAspectRatio: true,
+  plugins: {
+    legend: {
+      position: "top" as const,
+    },
+    title: {
+      display: true,
+      text: "Games",
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      stepSize: 1,
+      precision: 0,
+    },
+  },
+};
+
+const GamesBarChart: React.FC<ChartProps> = ({ games }) => {
+  const labels = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const monthData = Array.from({ length: 12 }, () => ({ wins: 0, losses: 0 }));
+
+  games.forEach((game) => {
+    const monthIndex = new Date(game.createdAt).getMonth();
+    if (game.isWon) {
+      monthData[monthIndex].wins += 1;
+    } else {
+      monthData[monthIndex].losses += 1;
+    }
+  });
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "Wins",
+        data: monthData.map((month) => month.wins),
+        backgroundColor: "rgba(75, 192, 192, 0.5)",
+      },
+      {
+        label: "Losses",
+        data: monthData.map((month) => month.losses),
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
+  return <Bar options={options} data={data} />;
+};
+
+export default GamesBarChart;

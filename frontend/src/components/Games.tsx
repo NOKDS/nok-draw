@@ -9,8 +9,9 @@ import TableRow from "@mui/material/TableRow";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 import Paper from "@mui/material/Paper";
-import { Typography } from "@mui/material";
-import { useTheme } from "../context/ThemeContext";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/system";
+import { Divider } from "@mui/material";
 
 interface Game {
   id: number;
@@ -25,14 +26,14 @@ interface GamesProps {
 }
 
 const Games: React.FC<GamesProps> = ({ games }) => {
-  const { darkMode } = useTheme();
+  const theme = useTheme();
 
-  const gamesPerPage = 5;
+  const gamesPerPage = 3;
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const startRow = (currentPage - 1) * gamesPerPage + 1;
   const endRow = currentPage * gamesPerPage;
-
+  const reversedGames = games.reverse();
   const totalPages = Math.ceil(games.length / gamesPerPage);
 
   const handleNextPage = (event: React.MouseEvent) => {
@@ -52,90 +53,144 @@ const Games: React.FC<GamesProps> = ({ games }) => {
   };
 
   return (
-    <React.Fragment>
-      <Paper
-        sx={{
-          width: "100%",
-          textAlign: "center",
-          p: 2,
-          backgroundColor: darkMode ? "inherit" : "beige",
-          minHeight: "32vh",
-        }}
+    <Paper
+      elevation={4}
+      sx={{
+        padding: theme.spacing(2),
+        textAlign: "center",
+        borderRadius: "1rem",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        position: "relative",
+        overflow: "hidden",
+        height: "100%",
+      }}
+    >
+      <Typography
+        variant="h5"
+        sx={{ color: "#007BFF", marginBottom: theme.spacing(2) }}
       >
-        <Typography variant="h5" sx={{ color: "#007BFF", marginBottom: 2 }}>
-          Recent Games
-        </Typography>
-        <TableContainer>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ textAlign: "center" }}>ID</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell sx={{ textAlign: "center" }}>Result</TableCell>
-                <TableCell sx={{ textAlign: "center" }}>
-                  Top 4 Predications
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {games
-                .slice(startRow - 1, endRow)
-                .map((game: Game, index: number) => (
-                  <TableRow key={game.id}>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {startRow + index}
-                    </TableCell>
-                    <TableCell>{game.category}</TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {game.isWon ? (
-                        <span style={{ color: "green" }}>Win</span>
-                      ) : (
-                        <span style={{ color: "red" }}>Loss</span>
-                      )}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {game.top3Predications}
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {totalPages > 1 && (
-          <div style={{ textAlign: "center", marginTop: "1rem" }}>
-            {currentPage > 1 && (
-              <Link
-                color="primary"
-                href="#"
-                onClick={handlePrevPage}
+        Recent Games
+      </Typography>
+      <Divider sx={{ width: "100%", marginY: theme.spacing(2) }} />
+
+      <TableContainer>
+        <Table size="medium">
+          <TableHead>
+            <TableRow>
+              <TableCell
                 sx={{
-                  marginRight: "3rem",
-                  display: "inline-block",
-                  textDecoration: "none",
-                  pointerEvents: currentPage > 1 ? "auto" : "none",
+                  textAlign: "center",
+                  padding: theme.spacing(5),
+                  fontWeight: "bold",
+                  fontSize: { xs: "1rem", md: "1.2rem" },
                 }}
               >
-                <ArrowCircleLeftIcon />
-              </Link>
-            )}
-            {currentPage < totalPages && (
-              <Link
-                color="primary"
-                href="#"
-                onClick={handleNextPage}
+                ID
+              </TableCell>
+              <TableCell
                 sx={{
-                  display: "inline-block",
-                  textDecoration: "none",
-                  pointerEvents: currentPage < totalPages ? "auto" : "none",
+                  textAlign: "center",
+                  padding: theme.spacing(3),
+                  fontWeight: "bold",
+                  fontSize: { xs: "1rem", md: "1.2rem" },
                 }}
               >
-                <ArrowCircleRightIcon />
-              </Link>
-            )}
-          </div>
-        )}
-      </Paper>
-    </React.Fragment>
+                Category
+              </TableCell>
+              <TableCell
+                sx={{
+                  textAlign: "center",
+                  padding: theme.spacing(3),
+                  fontWeight: "bold",
+                  fontSize: { xs: "1rem", md: "1.2rem" },
+                }}
+              >
+                Result
+              </TableCell>
+              <TableCell
+                sx={{
+                  textAlign: "center",
+                  padding: theme.spacing(3),
+                  fontWeight: "bold",
+                  fontSize: { xs: "1rem", md: "1.2rem" },
+                }}
+              >
+                Top 4 Predications
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reversedGames
+              .slice(startRow - 1, endRow)
+              .map((game: Game, index: number) => (
+                <TableRow key={game.id}>
+                  <TableCell
+                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
+                  >
+                    {startRow + index}
+                  </TableCell>
+                  <TableCell
+                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
+                  >
+                    {game.category}
+                  </TableCell>
+                  <TableCell
+                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
+                  >
+                    {game.isWon ? (
+                      <span style={{ color: "green" }}>Win</span>
+                    ) : (
+                      <span style={{ color: "red" }}>Loss</span>
+                    )}
+                  </TableCell>
+                  <TableCell
+                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
+                  >
+                    {game.top3Predications}
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {totalPages > 1 && (
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: theme.spacing(2),
+          }}
+        >
+          {currentPage > 1 && (
+            <Link
+              color="primary"
+              href="#"
+              onClick={handlePrevPage}
+              sx={{
+                display: "inline-block",
+                textDecoration: "none",
+                pointerEvents: currentPage > 1 ? "auto" : "none",
+              }}
+            >
+              <ArrowCircleLeftIcon />
+            </Link>
+          )}
+          {currentPage < totalPages && (
+            <Link
+              color="primary"
+              href="#"
+              onClick={handleNextPage}
+              sx={{
+                display: "inline-block",
+                textDecoration: "none",
+                pointerEvents: currentPage < totalPages ? "auto" : "none",
+              }}
+            >
+              <ArrowCircleRightIcon />
+            </Link>
+          )}
+        </div>
+      )}
+    </Paper>
   );
 };
 

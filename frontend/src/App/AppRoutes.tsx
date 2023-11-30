@@ -8,9 +8,9 @@ import SinglePlayerMode from "../components/SinglePlayerMode";
 import Dashboard from "../pages/Dashboard";
 import { RootState } from "../redux/rootReducer";
 import { useSelector } from "react-redux";
-import AvatartPicker from "../components/AvatarPicker";
+import AvatarPicker from "../components/AvatarPicker";
 import UserHomePage from "../pages/UserHomePage";
-// import Dash from "../pages/dash";
+import Settings from "../pages/Settings";
 const AppRoutes = () => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   return (
@@ -38,11 +38,20 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
-        path="/dashboard/avatar"
+        path="/settings"
         element={
           <ProtectedRoute isLoggedIn={isLoggedIn}>
-            <AvatartPicker />
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings/avatars"
+        element={
+          <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <AvatarPicker />
           </ProtectedRoute>
         }
       />

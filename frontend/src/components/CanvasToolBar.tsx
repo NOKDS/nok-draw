@@ -76,7 +76,7 @@ const CanvasToolBar: React.FC<CanvasToolBarProps> = ({
         }}
         disableTouchRipple
       >
-        <IconButton color={darkMode ? "error" : "warning"} size="large">
+        <IconButton color={darkMode ? "error" : "error"} size="large">
           <Clear sx={{ mb: 0.5 }} />
         </IconButton>
         <Typography

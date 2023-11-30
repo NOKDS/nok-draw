@@ -18,10 +18,10 @@ import RenderVideoBackground from "../components/RenderVideoBackground";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
-// @ts-ignore
-import Video from "../assets/BackgroundVideo9.mp4";
 import { signupUserThunk } from "../redux/user/user.actions";
 import Alert from "@mui/material/Alert";
+import Image from "../assets/background/background3.jpg";
+import RenderBackgroundImage from "../components/RenderBackgroundImage";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -101,7 +101,7 @@ const SignUp: React.FC = () => {
 
   return (
     <>
-      <RenderVideoBackground videoSource={Video} low={30} high={70} />
+      <RenderBackgroundImage imageSource={Image} low={30} high={70} />
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -121,7 +121,7 @@ const SignUp: React.FC = () => {
               flexDirection: "column",
               alignItems: "center",
               padding: 3,
-              opacity: 0.8,
+              opacity: 0.9,
               borderRadius: 3,
               transition: "box-shadow 0.2s",
               "&:hover": {

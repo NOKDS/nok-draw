@@ -23,6 +23,8 @@ import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
 // @ts-ignore
 import Video from "../assets/BackgroundVideo2.mp4";
+import RenderBackgroundImage from "../components/RenderBackgroundImage";
+import Image from "../assets/background/background3.jpg";
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -61,7 +63,6 @@ const SignIn: React.FC = () => {
       password: password as string,
     };
 
-    console.log(userData);
     if (!userData.email && !userData.username) {
       setFormError("Please enter a valid email or username.");
       setHasError(true);
@@ -84,7 +85,7 @@ const SignIn: React.FC = () => {
 
   return (
     <>
-      <RenderVideoBackground videoSource={Video} low={30} high={70} />
+      <RenderBackgroundImage imageSource={Image} low={30} high={70} />
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -104,7 +105,7 @@ const SignIn: React.FC = () => {
               flexDirection: "column",
               alignItems: "center",
               padding: 2,
-              opacity: 0.8,
+              opacity: 0.9,
               borderRadius: 3,
               transition: "box-shadow 0.2s",
               "&:hover": {

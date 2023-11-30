@@ -8,7 +8,7 @@ import { useTheme } from "../context/ThemeContext";
 function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number }
 ) {
-  const { darkMode } = useTheme();
+  const { darkMode, theme } = useTheme();
   const seconds = Math.round(props.value / (100 / 60));
   return (
     <Box sx={{ position: "relative", display: "inline-flex", mb: 2 }}>
@@ -21,10 +21,10 @@ function CircularProgressWithLabel(
             seconds <= 10
               ? darkMode
                 ? "error.light"
-                : "error.main"
+                : "error.light"
               : darkMode
-              ? "primary.dark"
-              : "primary.main",
+              ? theme.palette.revPrimary.main
+              : theme.palette.revPrimary.main,
         }}
         {...props}
       />
@@ -47,11 +47,11 @@ function CircularProgressWithLabel(
             color:
               seconds <= 10
                 ? darkMode
-                  ? "error.light"
-                  : "error.main"
+                  ? theme.palette.error.main
+                  : theme.palette.error.main
                 : darkMode
-                ? "primary.light"
-                : "primary.main",
+                ? theme.palette.revPrimary.main
+                : theme.palette.revPrimary.main,
           }}
         >
           {seconds > 9 ? seconds : `${seconds}s`}

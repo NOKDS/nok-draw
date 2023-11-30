@@ -15,6 +15,7 @@ import {
   guestPredictDrawingThunk,
   userPredictDrawingThunk,
 } from "../redux/games/games.actions";
+import StartButton from "../assets/start-button/start-button1.svg";
 
 const SinglePlayerCanvas = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -24,7 +25,7 @@ const SinglePlayerCanvas = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [shouldClearCanvas, setShouldClearCanvas] = useState(false);
-  const [timer, setTimer] = useState(15);
+  const [timer, setTimer] = useState(30);
   const [startButtonVisible, setStartButtonVisible] = useState(true);
   const [hasSubmittedDrawing, setHasSubmittedDrawing] = useState(false);
   const selectedCategory = useRef<string>("");
@@ -82,7 +83,7 @@ const SinglePlayerCanvas = () => {
     if (ctx) ctx.beginPath();
   }, []);
 
-  const startTimerAndHideButton = useCallback(() => {
+  const startGameTimer = useCallback(() => {
     setStartButtonVisible(false);
     const countdown = setInterval(() => {
       setTimer((prevTimer) => {
@@ -120,7 +121,6 @@ const SinglePlayerCanvas = () => {
       } else {
         response = await dispatch(guestPredictDrawingThunk(data));
       }
-      console.log(response);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -204,31 +204,39 @@ const SinglePlayerCanvas = () => {
       }}
     >
       {startButtonVisible && (
-        <Button
+        <Box
           sx={{
-            zIndex: 1,
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            padding: "10px 20px",
-            fontSize: ["1rem", "1.5rem"],
-            fontWeight: "bold",
-            color: "#4CAF50",
-            border: "2px solid #4CAF50",
-            borderRadius: "8px",
-            cursor: "pointer",
-            transition: "color 0.3s ease, border-color 0.3s ease",
-            "&:hover": {
-              color: "#45a049",
-              borderColor: "#45a049",
-              cursor: "pointer",
-            },
           }}
-          onClick={startTimerAndHideButton}
         >
-          Start Drawing
-        </Button>
+          <Button
+            sx={{
+              transition: "transform 0.3s ease-in-out",
+
+              "&:hover": {
+                backgroundColor: "transparent",
+                boxShadow: "none",
+                cursor: "pointer",
+                transform: "scale(1.5)",
+              },
+            }}
+            disableRipple
+            onClick={startGameTimer}
+          >
+            <img
+              src={StartButton}
+              alt="Start Drawing"
+              style={{
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+              }}
+            />
+          </Button>
+        </Box>
       )}
       {!startButtonVisible && (
         <>

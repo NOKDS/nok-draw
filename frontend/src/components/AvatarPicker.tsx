@@ -29,7 +29,7 @@ const Avatar: React.FC = () => {
 
     try {
       await dispatch(updateUserThunk(newAvatar));
-      navigate("/dashboard");
+      navigate(-1);
     } catch (error) {
       console.error(error);
     }
