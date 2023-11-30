@@ -11,8 +11,15 @@ import cv2
 app = Flask(__name__)
 CORS(app, origins="*")
 
-categories = ["bear", "bird", "cat", "cow", "dog", "elephant", "horse", "lion", "penguin", "rabbit"]
-model = load_model('NOK_CNN.h5', compile=False)
+categories = [
+              "bear", "bird", "cat", "cow", "dog", "elephant",
+              "horse", "lion", "penguin", "rabbit", "airplane",
+              "computer", "crocodile", "clock", "compass", "camel",
+              "fireplace", "campfire", "diamond",
+              "triangle", "snake", "beach", "camera", "sandwhich",
+              "chair", "arm", "bed", "baseball", "snowman"
+              ]
+model = load_model('model.h5', compile=False)
 
 def preprocess_canvas_image(base64_str, target_size=(28, 28)):
     try:
@@ -83,6 +90,46 @@ def predict():
     except Exception as e:
         print(f"Exception during prediction: {e}")
         return jsonify({'error': 'An unexpected error occurred during prediction'}), 500
+
+@app.route('/predictMany', methods=['POST'])
+@cross_origin()
+def predictMany():
+    try:
+        # Extracting JSON data from POST request
+        data = request.json
+        if not data:
+            return jsonify({'message': 'No data provided'}), 400
+
+        allGuesses = {}
+        # print("DATA =", data)
+        userCanvases = data['canvasStrings']
+        for userObject in userCanvases:
+            # print("USER OBJECT", userObject)
+            userId, image = userObject['userId'], userObject['canvasString']
+            image = image.split(",")[-1]
+            img_array = preprocess_canvas_image(image)
+
+            # Perform prediction
+            predictions = model.predict(np.expand_dims(img_array, axis=0))
+            # map num to probability
+            categoryProb = {}
+            for index, probability in enumerate(predictions[0]):
+                categoryProb[index] = probability
+            # print(categoryProb)
+            top_classes = np.argsort(predictions[0])[-4:][::-1]
+
+            # print("PREDICTIONS", predictions)
+            # print("TOP CLASSES", top_classes)
+            guesses = [[categories[num], float(categoryProb[num])] for num in top_classes]
+            allGuesses[userId] = guesses
+        print("GOT ALL GUESSES")
+        for guess in allGuesses:
+            print(guess, allGuesses[guess])
+        return jsonify({'message': {'guesses': allGuesses}}), 200
+    except Exception as e:
+        print(f"Exception during prediction: {e}")
+        return jsonify({'error': 'An unexpected error occurred during prediction'}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
