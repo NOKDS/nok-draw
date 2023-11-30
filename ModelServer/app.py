@@ -19,7 +19,7 @@ categories = [
               "triangle", "snake", "beach", "camera", "sandwhich",
               "chair", "arm", "bed", "baseball", "snowman"
               ]
-model = load_model('model.h5', compile=False)
+model = load_model('Model.h5', compile=False)
 
 def preprocess_canvas_image(base64_str, target_size=(28, 28)):
     try:

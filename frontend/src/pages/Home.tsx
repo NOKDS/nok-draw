@@ -72,7 +72,7 @@ const Home: React.FC = () => {
           gutterBottom
           sx={{
             color: darkMode === true ? "lime" : "yellow",
-            fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
+            fontSize: { xs: "2.5rem", sm: "3rem", md: "3.5rem" },
           }}
         >
           <div className="">
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
           sx={{
             color: darkMode === true ? "white" : "white",
             p: 1,
-            fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.3rem" },
+            fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.2rem" },
           }}
         >
           Will your creations conquer the machine's judgment? Get ready to
@@ -161,11 +161,11 @@ const Home: React.FC = () => {
         color="text.primary"
         paragraph
         sx={{
-          pt: 15,
+          pt: 10,
           mb: 0,
           fontWeight: "bold",
           color: "#fff",
-          fontSize: { xs: "1.2rem", sm: "1.7rem", md: "2.2rem" },
+          fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem" },
         }}
       >
         Features
@@ -179,7 +179,7 @@ const Home: React.FC = () => {
           mt: 2,
           mb: 3,
           color: darkMode === true ? "#fff" : "#fff",
-          fontSize: { xs: "0.9rem", sm: "1.1rem", md: "1.3rem" },
+          fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.9rem" },
         }}
       >
         Discover Powerful Features
@@ -214,7 +214,7 @@ const Home: React.FC = () => {
                   component="h2"
                   color="text.primary"
                   sx={{
-                    fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem" },
+                    fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" },
                   }}
                 >
                   {card.title}
@@ -225,7 +225,7 @@ const Home: React.FC = () => {
                   component="p"
                   color="text.secondary"
                   sx={{
-                    fontSize: { xs: "0.7rem", sm: "0.85rem", md: "1.0rem" },
+                    fontSize: { xs: "0.6rem", sm: "0.7rem", md: "0.8rem" },
                   }}
                 >
                   {card.description}
@@ -241,11 +241,11 @@ const Home: React.FC = () => {
         color="text.primary"
         paragraph
         sx={{
-          mt: 10,
+          mt: 7,
           mb: 2,
           fontWeight: "bold",
           color: "#fff",
-          fontSize: { xs: "1.2rem", sm: "1.7rem", md: "2.2rem" },
+          fontSize: { xs: "1.1rem", sm: "1.3rem", md: "1.5rem" },
         }}
       >
         Frequently Asked Questions
@@ -257,7 +257,7 @@ const Home: React.FC = () => {
               expanded={expanded === index}
               onChange={handleChange(index)}
               sx={{
-                margin: { xs: "0.1rem 0", sm: "0.2rem 0", md: "0.3rem 0" },
+                margin: { xs: "0.1rem 0", sm: "0.2rem 0", md: "0.25rem 0" },
               }}
             >
               <AccordionSummary
@@ -272,7 +272,7 @@ const Home: React.FC = () => {
                   color="text.primary"
                   sx={{
                     pl: { xs: "0.4rem", sm: "0.6rem", md: "0.8rem" },
-                    fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1.1rem" },
+                    fontSize: { xs: "0.75rem", sm: "0.8rem", md: "0.9rem" },
                   }}
                 >
                   {faq.question}
@@ -283,7 +283,7 @@ const Home: React.FC = () => {
                   variant="body1"
                   color="text.secondary"
                   sx={{
-                    fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.95rem" },
+                    fontSize: { xs: "0.65rem", sm: "0.70rem", md: "0.80rem" },
                   }}
                 >
                   {faq.answer}

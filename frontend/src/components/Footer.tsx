@@ -13,6 +13,9 @@ function Copyright() {
         variant="body2"
         color={theme.palette.secondary.main}
         align="center"
+        sx={{
+          fontSize: { xs: "0.4rem", sm: "0.5rem", md: "0.6rem" },
+        }}
       >
         {"Copyright © "}
         <Link
@@ -47,6 +50,9 @@ const Footer: React.FC = () => {
           // color="text.secondary"
           component="p"
           color={theme.palette.secondary.main}
+          sx={{
+            fontSize: { xs: "0.4rem", sm: "0.5rem", md: "0.6rem" },
+          }}
         >
           Play & learn!
         </Typography>
