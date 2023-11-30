@@ -2,3 +2,5 @@ backend/node_modules/
 backend/fakeUserData.json
 frontend/node_modules/
 ModelServer/venv
+node_modules
+node_modules

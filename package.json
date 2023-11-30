@@ -1,5 +1,13 @@
 {
   "dependencies": {
-    "recharts": "^2.10.1"
+    "@mui/x-charts": "^6.18.2",
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-parallax": "^3.5.1",
+    "react-scroll": "^1.9.0",
+    "react-scroll-parallax": "^3.4.5",
+    "react-spring": "^9.7.3",
+    "recharts": "^2.10.1",
+    "three": "^0.158.0"
   }
 }

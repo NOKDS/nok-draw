@@ -30,6 +30,7 @@ router.post("/", async (req, res) => {
         image: canvas_data,
         UserId: req.user.id,
       });
+      console.log(guesses);
       try {
       } catch (error) {
         console.error("Error:", error.message);
