@@ -2,6 +2,9 @@ const axios = require('axios');
 const RoomUser = require('./RoomUserClass');
 const User = require('./db/models/user');
 const { Game } = require('./db/models');
+
+const baseUrl = process.env.FLASK_APP_API_URL || 'http://127.0.0.1:5000';
+
 module.exports = function setupSocketServer(io) {
     let queue = [];
     let roomCount = 0;
@@ -83,7 +86,7 @@ module.exports = function setupSocketServer(io) {
                         const canvasStrings = Object.values(roomUsers[roomName]).map(value => Object.fromEntries([['userId',value.userId], ['canvasString', value.canvasString]]));
                         // console.log("CANVAS STRINGS", canvasStrings)
                         try {
-                            const response = await axios.post('http://127.0.0.1:5000/predictMany', {
+                            const response = await axios.post(`${baseUrl}/predictMany`, {
                                 canvasStrings: canvasStrings
                             });
                             // console.log("GOT RESULT", response)

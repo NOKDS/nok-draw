@@ -2,10 +2,11 @@ const router = require("express").Router();
 const axios = require("axios");
 const { Game } = require("../db/models");
 
+const baseUrl = process.env.FLASK_APP_API_URL || 'http://127.0.0.1:5000';
 router.post("/", async (req, res) => {
   try {
     const { canvas_data, room_name, user_id, category } = req.body;
-    const flaskResponse = await axios.post("http://127.0.0.1:5000/predict", {
+    const flaskResponse = await axios.post(`${baseUrl}/predict`, {
       canvas_data,
       room_name,
       user_id,

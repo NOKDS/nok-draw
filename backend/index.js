@@ -6,12 +6,17 @@ const session = require("express-session");
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const passport = require("passport");
 const setupSocketServer = require("./wsocket");
+// prod: switch to https
 const http = require("http");
 const { User } = require("./db/models");
 const app = express();
+// prod: add fs module for ssl cert.
 
+// prod: options with key and cert. 
+// prod: add options to the create server, and switch http -> https
 const server = http.createServer(app);
 
+//prod: switch origins to the static frontend app.
 const io = require("socket.io")(server, {
   cors: {
     origin: "*",
@@ -75,6 +80,7 @@ const configSession = () => ({
   },
 });
 
+// prod: set origin to static app.
 const setupMiddleware = (app) => {
   app.use(
     cors({

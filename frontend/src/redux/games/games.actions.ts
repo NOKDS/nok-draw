@@ -4,6 +4,8 @@ import { ThunkAction } from "redux-thunk";
 import { RootState } from "../rootReducer";
 import { AnyAction } from "redux";
 
+const baseUrl = process.env.REACT_APP_API_URL || 'https://nok-draw-backend.vercel.app';
+
 interface DrawingData {
   canvas_data: string;
   room_name: string;
@@ -37,7 +39,7 @@ export const addGameThunk =
       console.log("ADDGAMETHUNK IS FIRING UP");
       const response = await axios.post(
         // "http://localhost:8080/api/games",
-        `https://nok-draw-backend.vercel.app/api/games`,
+        `${baseUrl}/api/games`,
         gameData,
         {
           withCredentials: true,
@@ -56,7 +58,7 @@ export const fetchGamesThunk =
 
       const response = await axios.get(
         // "http://localhost:8080/api/games",
-        `https://nok-draw-backend.vercel.app/api/games`,
+        `${baseUrl}/api/games`,
         {
           withCredentials: true,
         }
@@ -77,7 +79,7 @@ export const guestPredictDrawingThunk =
       try {
         const response = await axios.post(
           // "http://localhost:8080/api/predict",
-          "https://nok-draw-backend.vercel.app/api/predict",
+          `${baseUrl}/api/predict`,
           gameData
         );
 
@@ -107,7 +109,7 @@ export const userPredictDrawingThunk =
       try {
         const response = await axios.post(
           // "http://localhost:8080/api/predict",
-          "https://nok-draw-backend.vercel.app/api/predict",
+          `${baseUrl}/api/predict`,
           gameData,
           {
             withCredentials: true,

@@ -4,6 +4,8 @@ import { RootState } from "../rootReducer";
 import { AnyAction } from "redux";
 import UserActionTypes from "./user.types";
 
+const baseUrl = process.env.REACT_APP_API_URL || 'https://nok-draw-backend.vercel.app';
+
 export const fetchUser = (userData: any) => ({
   type: UserActionTypes.FETCH_USER,
   payload: userData,
@@ -48,7 +50,7 @@ export const fetchUserThunk =
       console.log("FETCHUSERTHUNK FIRING UP");
       const response = await axios.get(
         // `http://localhost:8080/auth/me`,
-        `https://nok-draw-backend.vercel.app/auth/me`,
+        `${baseUrl}/auth/me`,
         {
           withCredentials: true,
         }
@@ -66,7 +68,7 @@ export const updateUserThunk =
       console.log("UPDATEUSERTHUNK FIRING UP");
       const response = await axios.put(
         // `http://localhost:8080/api/me`,
-        `https://nok-draw-backend.vercel.app/api/me`,
+        `${baseUrl}/api/me`,
         userData,
         {
           withCredentials: true,
@@ -86,7 +88,7 @@ export const signupUserThunk =
       console.log("SIGNUPUSERTHUNK FIRING UP");
       const response = await axios.post(
         // `http://localhost:8080/auth/signup`,
-        `https://nok-draw-backend.vercel.app/auth/signup`,
+        `${baseUrl}/auth/signup`,
 
         userData,
         { withCredentials: true }
@@ -109,7 +111,7 @@ export const loginUserThunk =
 
       const response = await axios.post(
         // `http://localhost:8080/auth/login`,
-        "https://nok-draw-backend.vercel.app/auth/login",
+        `${baseUrl}/auth/login`,
 
         userData,
         { withCredentials: true }
@@ -130,7 +132,7 @@ export const logoutUserThunk =
 
       await axios.get(
         // `http://localhost:8080/auth/logout`,
-        `https://nok-draw-backend.vercel.app/auth/logout`,
+        `${baseUrl}/auth/logout`,
         {
           withCredentials: true,
         }
@@ -147,7 +149,7 @@ export const deleteUserThunk =
     try {
       await axios.delete(
         // `http://localhost:8080/api/me`,
-        `https://nok-draw-backend.vercel.app/api/me`,
+        `${baseUrl}/api/me`,
         {
           withCredentials: true,
         }
