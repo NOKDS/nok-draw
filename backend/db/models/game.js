@@ -10,12 +10,8 @@ const Game = db.define("Game", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  top3Predications: {
+  top4Predications: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  image: {
-    type: DataTypes.TEXT,
     allowNull: false,
   },
 });

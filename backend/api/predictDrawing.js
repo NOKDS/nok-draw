@@ -14,20 +14,18 @@ router.post("/", async (req, res) => {
     const status = category === guesses[0];
     const response = {
       isWon: status,
-      top3Predications: flaskResponse.data.message.guesses,
-      image: canvas_data,
+      top4Predications: flaskResponse.data.message.guesses,
     };
 
     if (req.user) {
-      const top3PredictionsString = JSON.stringify(
+      const top4PredictionsString = JSON.stringify(
         flaskResponse.data.message.guesses
       );
 
       await Game.create({
         isWon: status,
         category: category,
-        top3Predications: top3PredictionsString,
-        image: canvas_data,
+        top4Predications: top4PredictionsString,
         UserId: req.user.id,
       });
       console.log(guesses);
