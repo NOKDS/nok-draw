@@ -69,8 +69,8 @@ const configSession = () => ({
   cookie: {
     maxAge: 8 * 60 * 60 * 1000,
     httpOnly: true,
-    // secure: true,
-    // sameSite: "none",
+    secure: true,
+    sameSite: "none",
     path: "/",
   },
 });

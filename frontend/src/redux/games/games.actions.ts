@@ -36,8 +36,8 @@ export const addGameThunk =
     try {
       console.log("ADDGAMETHUNK IS FIRING UP");
       const response = await axios.post(
-        "http://localhost:8080/api/games",
-        // `https://nok-draw-backend.vercel.app/api/games`,
+        // "http://localhost:8080/api/games",
+        `https://nok-draw-backend.vercel.app/api/games`,
         gameData,
         {
           withCredentials: true,
@@ -55,8 +55,8 @@ export const fetchGamesThunk =
       console.log("fetchGamesThunk IS FIRING UP");
 
       const response = await axios.get(
-        "http://localhost:8080/api/games",
-        // `https://nok-draw-backend.vercel.app/api/games`,
+        // "http://localhost:8080/api/games",
+        `https://nok-draw-backend.vercel.app/api/games`,
         {
           withCredentials: true,
         }
@@ -76,8 +76,8 @@ export const guestPredictDrawingThunk =
     while (retries < MAX_RETRIES) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/predict",
-          // "https://nok-draw-backend.vercel.app/api/predict",
+          // "http://localhost:8080/api/predict",
+          "https://nok-draw-backend.vercel.app/api/predict",
           gameData
         );
 
@@ -106,8 +106,8 @@ export const userPredictDrawingThunk =
     while (retries < MAX_RETRIES) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/predict",
-          // "https://nok-draw-backend.vercel.app/api/predict",
+          // "http://localhost:8080/api/predict",
+          "https://nok-draw-backend.vercel.app/api/predict",
           gameData,
           {
             withCredentials: true,
