@@ -72,7 +72,12 @@ const ResponsiveToolTip: React.FC<ResponsiveToolTipProps> = ({
               handleCloseUserMenu();
             }}
           >
-            <Typography textAlign="center">{setting}</Typography>
+            <Typography
+              textAlign="center"
+              sx={{ fontFamily: "'Nova Square', sans-serif" }}
+            >
+              {setting}
+            </Typography>
           </MenuItem>
         ))}
       </Menu>

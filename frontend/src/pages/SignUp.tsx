@@ -14,7 +14,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Footer from "../components/Footer";
 import Paper from "@mui/material/Paper";
-import RenderVideoBackground from "../components/RenderVideoBackground";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
@@ -22,6 +21,7 @@ import { signupUserThunk } from "../redux/user/user.actions";
 import Alert from "@mui/material/Alert";
 import Image from "../assets/background/background3.jpg";
 import RenderBackgroundImage from "../components/RenderBackgroundImage";
+import { CircularProgress } from "@mui/material";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -34,6 +34,7 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const resetForm = () => {
     setFirstName("");
@@ -73,6 +74,7 @@ const SignUp: React.FC = () => {
       setHasError(true);
       return;
     }
+    setIsLoading(true);
 
     try {
       const userData = {
@@ -96,6 +98,8 @@ const SignUp: React.FC = () => {
         setFormError("An error occurred. Please try again later.");
       }
       setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -133,7 +137,11 @@ const SignUp: React.FC = () => {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography
+              component="h1"
+              variant="h5"
+              sx={{ fontFamily: "'Bungee', sans-serif" }}
+            >
               Sign up
             </Typography>
             <Box
@@ -214,13 +222,25 @@ const SignUp: React.FC = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  p: 1.5,
+                  fontFamily: "'Nova Square', sans-serif",
+                }}
+                disabled={isLoading}
               >
-                Sign Up
+                {isLoading ? <CircularProgress size={25} /> : "Sign Up"}
               </Button>
               <Grid container justifyContent="center">
                 <Grid item>
-                  <Link href="/login" variant="body2">
+                  <Link
+                    href="/login"
+                    variant="body2"
+                    style={{
+                      fontFamily: "'Lilita One', sans- serif",
+                    }}
+                  >
                     Already have an account? Sign in
                   </Link>
                 </Grid>

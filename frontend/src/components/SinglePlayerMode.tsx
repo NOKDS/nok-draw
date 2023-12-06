@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Box, Container, Button } from "@mui/material";
+import {
+  Box,
+  Container,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  CircularProgress,
+  Grid,
+} from "@mui/material";
 import { RootState } from "../redux/rootReducer";
 import { AnyAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
@@ -16,6 +25,8 @@ import {
   userPredictDrawingThunk,
 } from "../redux/games/games.actions";
 import StartButton from "../assets/start-button/start-button1.svg";
+import { useNavigate } from "react-router-dom";
+import RecentGame from "./RecentGame";
 
 const SinglePlayerCanvas = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -25,10 +36,20 @@ const SinglePlayerCanvas = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [isErasing, setIsErasing] = useState(false);
   const [shouldClearCanvas, setShouldClearCanvas] = useState(false);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(0);
   const [startButtonVisible, setStartButtonVisible] = useState(true);
   const [hasSubmittedDrawing, setHasSubmittedDrawing] = useState(false);
   const selectedCategory = useRef<string>("");
+  const [responseDialogOpen, setResponseDialogOpen] = useState(false);
+  const [processing, setProcessing] = useState(false);
+
+  const handleOpenResponseDialog = () => {
+    setResponseDialogOpen(true);
+  };
+
+  const handleCloseResponseDialog = () => {
+    setResponseDialogOpen(false);
+  };
 
   const handleCategorySelect = (category: string) => {
     selectedCategory.current = category;
@@ -85,6 +106,13 @@ const SinglePlayerCanvas = () => {
 
   const startGameTimer = useCallback(() => {
     setStartButtonVisible(false);
+    setTimer(30);
+    setHasSubmittedDrawing(false);
+    setIsDrawing(false);
+    setIsErasing(false);
+    setShouldClearCanvas(true);
+    setProcessing(false);
+    handleCloseResponseDialog();
     const countdown = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer === 0) {
@@ -100,6 +128,7 @@ const SinglePlayerCanvas = () => {
 
   const submitDrawing = async () => {
     if (hasSubmittedDrawing) return;
+    setProcessing(true);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -114,15 +143,20 @@ const SinglePlayerCanvas = () => {
     };
     try {
       setHasSubmittedDrawing(true);
-      let response;
+      setStartButtonVisible(true);
+      let response: any;
       if (isLoggedIn) {
         response = await dispatch(userPredictDrawingThunk(data));
         await dispatch(fetchGamesThunk());
       } else {
         response = await dispatch(guestPredictDrawingThunk(data));
       }
+
+      handleOpenResponseDialog();
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -203,7 +237,21 @@ const SinglePlayerCanvas = () => {
         justifyContent: "center",
       }}
     >
-      {startButtonVisible && (
+      {processing && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 2,
+          }}
+        >
+          <CircularProgress size={60} />
+        </Box>
+      )}
+
+      {startButtonVisible && !processing && (
         <Box
           sx={{
             position: "absolute",
@@ -238,8 +286,12 @@ const SinglePlayerCanvas = () => {
           </Button>
         </Box>
       )}
-      {!startButtonVisible && (
-        <>
+      {!startButtonVisible && !processing && (
+        <div
+          style={{
+            zIndex: "1",
+          }}
+        >
           <Box sx={{ mt: 3, zIndex: 1 }}>
             <CircularProgressWithLabel value={(timer / 60) * 100} />
           </Box>
@@ -254,7 +306,7 @@ const SinglePlayerCanvas = () => {
               clearCanvas={clearCanvas}
             />
           </Box>
-        </>
+        </div>
       )}
       <canvas
         style={{
@@ -274,7 +326,30 @@ const SinglePlayerCanvas = () => {
         width={window.innerWidth}
         height={window.innerHeight}
         ref={canvasRef}
-      ></canvas>
+      >
+        <Dialog
+          open={responseDialogOpen}
+          onClose={handleCloseResponseDialog}
+          aria-labelledby="response-dialog-title"
+          aria-describedby="response-dialog-description"
+        >
+          {" "}
+          <DialogContent>
+            <Grid container spacing={2} justifyContent="center">
+              <Grid item xs={12}>
+                <RecentGame />
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Grid container justifyContent="center">
+              <Button onClick={handleCloseResponseDialog} color="primary">
+                Close
+              </Button>
+            </Grid>
+          </DialogActions>
+        </Dialog>
+      </canvas>
     </Container>
   );
 };

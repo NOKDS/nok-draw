@@ -36,50 +36,54 @@ const Avatar: React.FC = () => {
   };
 
   return (
-    <>
+    <div>
       <CssBaseline />
-      <Container sx={{ pt: 20 }}>
+      <Container sx={{ pt: 15 }}>
         <IconButton onClick={handleBack}>
           <ArrowBackIcon sx={{ fontSize: 32 }} />
         </IconButton>
-        <Grid container spacing={2} justifyContent="center" sx={{ pt: 5 }}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mt: 2, textAlign: "center", width: "100%" }}
+        >
           {avatars.map((avatar, index) => (
-            <Grid item key={index} xs="auto" sm="auto" md="auto">
-              <div className="avatar-element">
-                <Button
-                  onClick={() => handleSubmit(avatar)}
-                  className="avatar-submit-btn"
-                  sx={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
+            <Grid item key={index} xs={6} sm={6} md={4} lg={4} xl={4}>
+              <Button
+                onClick={() => handleSubmit(avatar)}
+                sx={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  borderRadius: "50%",
+                  "&:hover": {
+                    "& img": {
+                      transform: "scale(1.05)",
+                    },
+                    border: "2px solid #007BFF",
+                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                  },
+                }}
+              >
+                <img
+                  key={index}
+                  src={avatar}
+                  alt={`user profile ${index + 1}`}
+                  style={{
+                    width: "100%",
+                    height: "100%",
                     borderRadius: "50%",
                     objectFit: "cover",
-                    "&:hover": {
-                      border: "2px solid #007BFF",
-                      transform: "scale(1.05)",
-                      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-                    },
+                    transition: "transform 0.2s ease-in-out",
                   }}
-                >
-                  <img
-                    key={index}
-                    src={avatar}
-                    alt={`user profile ${index + 1}`}
-                    className="avatar-image"
-                    style={{
-                      width: "15rem",
-                      height: "15rem",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </Button>
-              </div>
+                />
+              </Button>
             </Grid>
           ))}
         </Grid>
       </Container>
-    </>
+    </div>
   );
 };
 

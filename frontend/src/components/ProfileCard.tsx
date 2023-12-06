@@ -59,10 +59,20 @@ const ProfileCard: React.FC<UserPaperProps> = ({ user }) => {
           }}
         />
       </Box>
-      <Typography component="h1" variant="h4" mb={2}>
+      <Typography
+        component="h1"
+        variant="h4"
+        mb={2}
+        sx={{ fontFamily: "'Bungee', sans-serif" }}
+      >
         Welcome, {user.name}!
       </Typography>
-      <Typography variant="body1" color="textSecondary" mb={4}>
+      <Typography
+        variant="body1"
+        color="textSecondary"
+        mb={4}
+        sx={{ fontFamily: "'Audiowide', sans-serif" }}
+      >
         {user.email} | @{user.username}
       </Typography>
       <Box
@@ -78,7 +88,7 @@ const ProfileCard: React.FC<UserPaperProps> = ({ user }) => {
           component={Link}
           to="/playSmode"
           startIcon={<SportsEsportsIcon />}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", fontFamily: "'Nova Square', sans-serif" }}
         >
           Play Single Player Mode
         </Button>
@@ -97,7 +107,7 @@ const ProfileCard: React.FC<UserPaperProps> = ({ user }) => {
           component={Link}
           to="/playMmode"
           startIcon={<SportsEsportsIcon />}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", fontFamily: "'Nova Square', sans-serif" }}
         >
           Play Multiplayer Mode
         </Button>

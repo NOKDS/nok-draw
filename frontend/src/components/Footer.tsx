@@ -2,26 +2,21 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
-import { useTheme } from "../context/ThemeContext";
 
 function Copyright() {
-  const { theme } = useTheme();
-
   return (
     <Container>
       <Typography
         variant="body2"
-        color={theme.palette.secondary.main}
+        color="#fff"
         align="center"
         sx={{
+          fontFamily: "'Lilita One', sans-serif",
           fontSize: { xs: "0.4rem", sm: "0.5rem", md: "0.6rem" },
         }}
       >
         {"Copyright © "}
-        <Link
-          color={theme.palette.secondary.main}
-          href="https://github.com/NOKDS/nok-draw"
-        >
+        <Link color="#fff" href="https://github.com/NOKDS/nok-draw">
           NOK
         </Link>{" "}
         {new Date().getFullYear()}
@@ -32,13 +27,10 @@ function Copyright() {
 }
 
 const Footer: React.FC = () => {
-  const { theme } = useTheme();
-
   return (
     <div>
       <Container
         sx={{
-          position: "sticky",
           left: 0,
           bottom: 0,
         }}
@@ -47,10 +39,11 @@ const Footer: React.FC = () => {
         <Typography
           variant="subtitle1"
           align="center"
-          // color="text.secondary"
           component="p"
-          color={theme.palette.secondary.main}
+          color="#fff"
           sx={{
+            fontFamily: "'Lilita One', sans-serif",
+
             fontSize: { xs: "0.4rem", sm: "0.5rem", md: "0.6rem" },
           }}
         >

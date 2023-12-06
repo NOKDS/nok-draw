@@ -38,7 +38,12 @@ const GoogleLoginButton: React.FC = () => {
       type={darkMode ? "light" : "dark"}
       className="google-login-btn"
       onClick={handleGoogleSignIn}
-      style={{ width: "100%", borderRadius: 3, height: "auto" }}
+      style={{
+        width: "100%",
+        borderRadius: 3,
+        height: "auto",
+        fontFamily: "'Nova Square', sans-serif",
+      }}
     >
       Sign in with Google
     </GoogleButton>

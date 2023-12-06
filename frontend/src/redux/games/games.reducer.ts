@@ -9,7 +9,6 @@ interface GameState {
 export const INITIAL_GAME_STATE: GameState = {
   game: {},
   games: [],
-  predictedDrawing: {},
 };
 
 interface GameAction {
@@ -27,7 +26,7 @@ const gameReducer: Reducer<GameState, GameAction> = (
     case GameActionTypes.ADD_GAME:
       return { ...state, game: action.payload };
     case GameActionTypes.PREDICT_DRAWING:
-      return { ...state, predictedDrawing: action.payload };
+      return { ...state, game: action.payload };
     default:
       return state;
   }
