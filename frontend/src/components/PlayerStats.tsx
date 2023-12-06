@@ -8,7 +8,7 @@ import Chart from "../components/Chart";
 interface Game {
   id: number;
   isWon: boolean;
-  top3Predications: string;
+  top4Predications: string;
   createdAt: string;
 }
 
@@ -31,8 +31,10 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
     { wins: 0, losses: 0 } as { wins: number; losses: number }
   );
 
+  const areGamesPlayed = games.length > 0;
+
   return (
-    <>
+    <div>
       <Paper
         elevation={4}
         sx={{
@@ -47,7 +49,11 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
       >
         <Typography
           variant="h5"
-          sx={{ color: "#007BFF", marginBottom: theme.spacing(2) }}
+          sx={{
+            color: "#007BFF",
+            marginBottom: theme.spacing(2),
+            fontFamily: "'Audiowide', sans-serif",
+          }}
         >
           Player Stats
         </Typography>
@@ -58,6 +64,7 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
           sx={{
             fontSize: { xs: "1rem", md: "1.1rem" },
             marginBottom: theme.spacing(1),
+            fontFamily: "'Nova Square', sans-serif",
           }}
         >
           Games Played: {games.length}
@@ -88,6 +95,7 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
               variant="body1"
               sx={{
                 fontSize: { xs: "16px", md: "18px" },
+                fontFamily: "'Rubik Bubbles', sans-serif",
               }}
             >
               Wins: {stats.wins}
@@ -108,15 +116,16 @@ const PlayerStats: React.FC<PlayerStatsProps> = ({ games }) => {
               sx={{
                 fontSize: { xs: "16px", md: "18px" },
                 marginRight: theme.spacing(1),
+                fontFamily: "'Rubik Bubbles', sans-serif",
               }}
             >
               Losses: {stats.losses}
             </Typography>
           </div>
         </div>
-        <Chart games={games} />
+        {areGamesPlayed && <Chart games={games} />}
       </Paper>
-    </>
+    </div>
   );
 };
 

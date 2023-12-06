@@ -14,17 +14,15 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Footer from "../components/Footer";
-import RenderVideoBackground from "../components/RenderVideoBackground";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import { loginUserThunk } from "../redux/user/user.actions";
 import Alert from "@mui/material/Alert";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
-// @ts-ignore
-import Video from "../assets/BackgroundVideo2.mp4";
 import RenderBackgroundImage from "../components/RenderBackgroundImage";
 import Image from "../assets/background/background3.jpg";
+import { CircularProgress } from "@mui/material";
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
@@ -34,6 +32,7 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const resetForm = () => {
     setIdentifier("");
@@ -68,6 +67,7 @@ const SignIn: React.FC = () => {
       setHasError(true);
       return;
     }
+    setIsLoading(true);
 
     try {
       await dispatch(loginUserThunk(userData));
@@ -80,6 +80,8 @@ const SignIn: React.FC = () => {
         setFormError("An error occurred. Please try again later.");
       }
       setHasError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,12 +114,20 @@ const SignIn: React.FC = () => {
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                 opacity: 0.95,
               },
+              "@media (max-width: 600px)": {
+                margin: 2,
+                padding: 1,
+              },
             }}
           >
             <Avatar sx={{ m: 2, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography
+              component="h1"
+              variant="h5"
+              sx={{ fontFamily: "'Bungee', sans-serif" }}
+            >
               Sign in
             </Typography>
             <Box
@@ -155,18 +165,36 @@ const SignIn: React.FC = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, p: 1.5 }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  p: 1.5,
+                  fontFamily: "'Nova Square', sans-serif",
+                }}
+                disabled={isLoading}
               >
-                Sign In
+                {isLoading ? <CircularProgress size={25} /> : "Sign In"}
               </Button>
               <GoogleLoginButton />
               <Grid container justifyContent="center" sx={{ mt: 2 }}>
-                <Link href="#" variant="body2">
+                <Link
+                  href="#"
+                  variant="body2"
+                  style={{
+                    fontFamily: "'Rubik Bubbles', sans- serif",
+                  }}
+                >
                   Forgot password?
                 </Link>
               </Grid>
               <Grid container justifyContent="center" sx={{ mt: 1 }}>
-                <Link href="/signup" variant="body2">
+                <Link
+                  href="/signup"
+                  variant="body2"
+                  style={{
+                    fontFamily: "'Lilita One', sans- serif",
+                  }}
+                >
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

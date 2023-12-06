@@ -68,7 +68,7 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ handleLogout }) => {
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const href = isLoggedIn ? "/home" : "/";
   return (
-    <>
+    <div>
       <CssBaseline />
 
       <div
@@ -111,7 +111,7 @@ const ButtonAppBar: React.FC<ButtonAppBarProps> = ({ handleLogout }) => {
           </Grid>
         </Grid>
       </div>
-    </>
+    </div>
   );
 };
 

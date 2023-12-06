@@ -13,7 +13,7 @@ import {
 interface Game {
   id: number;
   isWon: boolean;
-  top3Predications: string;
+  top4Predications: string;
   createdAt: string;
 }
 

@@ -17,7 +17,7 @@ interface Game {
   id: number;
   category: string;
   isWon: boolean;
-  top3Predications: string;
+  top4Predications: string;
   createdAt: string;
 }
 
@@ -33,8 +33,9 @@ const Games: React.FC<GamesProps> = ({ games }) => {
 
   const startRow = (currentPage - 1) * gamesPerPage + 1;
   const endRow = currentPage * gamesPerPage;
-  const reversedGames = games.reverse();
+  const reversedGames = [...games].reverse();
   const totalPages = Math.ceil(games.length / gamesPerPage);
+  const hasGames = games.length > 0;
 
   const handleNextPage = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -67,96 +68,139 @@ const Games: React.FC<GamesProps> = ({ games }) => {
     >
       <Typography
         variant="h5"
-        sx={{ color: "#007BFF", marginBottom: theme.spacing(2) }}
+        sx={{
+          color: "#007BFF",
+          marginBottom: theme.spacing(2),
+          fontFamily: "'Audiowide', sans-serif",
+        }}
       >
-        Recent Games
+        Games History
       </Typography>
       <Divider sx={{ width: "100%", marginY: theme.spacing(2) }} />
-
-      <TableContainer>
-        <Table size="medium">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{
-                  textAlign: "center",
-                  padding: theme.spacing(5),
-                  fontWeight: "bold",
-                  fontSize: { xs: "1rem", md: "1.2rem" },
-                }}
-              >
-                ID
-              </TableCell>
-              <TableCell
-                sx={{
-                  textAlign: "center",
-                  padding: theme.spacing(3),
-                  fontWeight: "bold",
-                  fontSize: { xs: "1rem", md: "1.2rem" },
-                }}
-              >
-                Category
-              </TableCell>
-              <TableCell
-                sx={{
-                  textAlign: "center",
-                  padding: theme.spacing(3),
-                  fontWeight: "bold",
-                  fontSize: { xs: "1rem", md: "1.2rem" },
-                }}
-              >
-                Result
-              </TableCell>
-              <TableCell
-                sx={{
-                  textAlign: "center",
-                  padding: theme.spacing(3),
-                  fontWeight: "bold",
-                  fontSize: { xs: "1rem", md: "1.2rem" },
-                }}
-              >
-                Top 4 Predications
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {reversedGames
-              .slice(startRow - 1, endRow)
-              .map((game: Game, index: number) => (
-                <TableRow key={game.id}>
-                  <TableCell
-                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
-                  >
-                    {startRow + index}
-                  </TableCell>
-                  <TableCell
-                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
-                  >
-                    {game.category}
-                  </TableCell>
-                  <TableCell
-                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
-                  >
-                    {game.isWon ? (
-                      <span style={{ color: "green" }}>Win</span>
-                    ) : (
-                      <span style={{ color: "red" }}>Loss</span>
-                    )}
-                  </TableCell>
-                  <TableCell
-                    sx={{ textAlign: "center", padding: theme.spacing(2) }}
-                  >
-                    {game.top3Predications}
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {hasGames ? (
+        <TableContainer>
+          <Table size="medium">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    textAlign: "center",
+                    padding: theme.spacing(5),
+                    fontWeight: "bold",
+                    fontSize: { xs: "1rem", md: "1.2rem" },
+                    fontFamily: "'Nova Square', sans-serif",
+                  }}
+                >
+                  ID
+                </TableCell>
+                <TableCell
+                  sx={{
+                    textAlign: "center",
+                    padding: theme.spacing(3),
+                    fontWeight: "bold",
+                    fontSize: { xs: "1rem", md: "1.2rem" },
+                    fontFamily: "'Nova Square', sans-serif",
+                  }}
+                >
+                  Category
+                </TableCell>
+                <TableCell
+                  sx={{
+                    textAlign: "center",
+                    padding: theme.spacing(3),
+                    fontWeight: "bold",
+                    fontSize: { xs: "1rem", md: "1.2rem" },
+                    fontFamily: "'Nova Square', sans-serif",
+                  }}
+                >
+                  Result
+                </TableCell>
+                <TableCell
+                  sx={{
+                    textAlign: "center",
+                    padding: theme.spacing(3),
+                    fontWeight: "bold",
+                    fontSize: { xs: "1rem", md: "1.2rem" },
+                    fontFamily: "'Nova Square', sans-serif",
+                  }}
+                >
+                  Top 4 Predications
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reversedGames
+                .slice(startRow - 1, endRow)
+                .map((game: Game, index: number) => (
+                  <TableRow key={game.id}>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        padding: theme.spacing(2),
+                        fontFamily: "'Rubik Bubbles', sans-serif",
+                      }}
+                    >
+                      {startRow + index}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        padding: theme.spacing(2),
+                        fontFamily: "'Rubik Bubbles', sans-serif",
+                      }}
+                    >
+                      {game.category}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        padding: theme.spacing(2),
+                        fontFamily: "'Rubik Bubbles', sans-serif",
+                      }}
+                    >
+                      {game.isWon ? (
+                        <span style={{ color: "green" }}>Win</span>
+                      ) : (
+                        <span style={{ color: "red" }}>Loss</span>
+                      )}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: "center",
+                        padding: theme.spacing(2),
+                        fontFamily: "'Rubik Bubbles', sans-serif",
+                      }}
+                    >
+                      {JSON.parse(game.top4Predications).map(
+                        (animal: string, index: number) => (
+                          <span key={index} style={{ margin: "0 4px" }}>
+                            {animal}
+                            {index < game.top4Predications.length - 1 && ","}
+                          </span>
+                        )
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography
+          variant="body1"
+          sx={{
+            textAlign: "center",
+            fontFamily: "'Audiowide', sans-serif",
+          }}
+        >
+          No history
+        </Typography>
+      )}
       {totalPages > 1 && (
         <div
           style={{
-            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
             marginTop: theme.spacing(2),
           }}
         >
@@ -169,6 +213,7 @@ const Games: React.FC<GamesProps> = ({ games }) => {
                 display: "inline-block",
                 textDecoration: "none",
                 pointerEvents: currentPage > 1 ? "auto" : "none",
+                marginRight: theme.spacing(1),
               }}
             >
               <ArrowCircleLeftIcon />
@@ -183,6 +228,7 @@ const Games: React.FC<GamesProps> = ({ games }) => {
                 display: "inline-block",
                 textDecoration: "none",
                 pointerEvents: currentPage < totalPages ? "auto" : "none",
+                marginLeft: theme.spacing(1),
               }}
             >
               <ArrowCircleRightIcon />

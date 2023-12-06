@@ -2,8 +2,6 @@ import React, { useCallback, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { Box, Container, CssBaseline, Grid, Paper } from "@mui/material";
 import PlayerStats from "../components/PlayerStats";
-import RenderBackgroundImage from "../components/RenderBackgroundImage";
-import Image from "../assets/background/background1.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { fetchUserThunk } from "../redux/user/user.actions";
@@ -21,6 +19,7 @@ import {
   BufferAttribute,
   Points,
 } from "three";
+import RecentGame from "../components/RecentGame";
 
 const Dashboard: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -72,9 +71,6 @@ const Dashboard: React.FC = () => {
       localStorage.setItem("cachedGames", JSON.stringify(games));
     }
   }, [games]);
-  React.useEffect(() => {
-    fetchData();
-  }, []);
 
   useEffect(() => {
     const createStarField = () => {
@@ -138,7 +134,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
-      <RenderBackgroundImage imageSource={Image} low={40} high={80} />
       <Box
         sx={{
           minHeight: "100vh",
@@ -151,7 +146,7 @@ const Dashboard: React.FC = () => {
         <CssBaseline />
         <Container component="main" maxWidth="lg" sx={{ mt: 15 }}>
           <Grid container spacing={3} sx={{ mb: 3 }}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={8}>
               <Paper
                 elevation={8}
                 sx={{
@@ -167,7 +162,23 @@ const Dashboard: React.FC = () => {
                 <ProfileCard user={user} />
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
+              <Paper
+                elevation={8}
+                sx={{
+                  padding: theme.spacing(4),
+                  p: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: "1rem",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                  height: "100%",
+                }}
+              >
+                <RecentGame />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={12}>
               <Paper
                 elevation={8}
                 sx={{

@@ -2,8 +2,6 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const StarsAnimation2 = () => {
-  const starsRef = useRef<THREE.Points>();
-
   useEffect(() => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(

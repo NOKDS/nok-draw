@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Divider,
   Paper,
@@ -18,10 +18,10 @@ const RecentGame: React.FC = () => {
   const theme = useTheme();
   const games = useSelector((state: RootState) => state.games.games);
   const lastGame = games[games.length - 1];
-  console.log(lastGame);
+
   if (!lastGame) {
     return (
-      <>
+      <div>
         <Typography
           variant="h5"
           sx={{
@@ -37,19 +37,30 @@ const RecentGame: React.FC = () => {
           variant="body1"
           sx={{
             textAlign: "center",
-            marginBottom: theme.spacing(2),
             fontFamily: "'Audiowide', sans-serif",
           }}
         >
           No game to display
         </Typography>
-      </>
+      </div>
     );
   }
 
-  const predictions = JSON.parse(games[games.length - 1].top3Predications);
+  const predictions = JSON.parse(lastGame.top4Predications);
+
   return (
-    <>
+    <Paper
+      elevation={4}
+      sx={{
+        padding: theme.spacing(4),
+        textAlign: "center",
+        borderRadius: "1rem",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        position: "relative",
+        overflow: "hidden",
+        height: "100%",
+      }}
+    >
       <Typography
         variant="h5"
         sx={{
@@ -65,14 +76,19 @@ const RecentGame: React.FC = () => {
       <Table>
         <TableBody>
           <TableRow>
-            <TableCell colSpan={2}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
+            <TableCell>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
+                  fontFamily: "'Nova Square', sans-serif",
                 }}
               >
+                Result:
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <div>
                 <div
                   style={{
                     display: "flex",
@@ -80,24 +96,24 @@ const RecentGame: React.FC = () => {
                     marginBottom: theme.spacing(1),
                   }}
                 >
-                  {lastGame.isWon ? (
-                    <SentimentVerySatisfiedIcon
-                      sx={{ color: "green", marginRight: theme.spacing(1) }}
-                    />
-                  ) : (
-                    <SentimentVeryDissatisfiedIcon
-                      sx={{ color: "red", marginRight: theme.spacing(1) }}
-                    />
-                  )}
                   <Typography
                     variant="body1"
                     sx={{
-                      fontSize: { xs: "16px", md: "18px" },
+                      fontSize: { xs: "1.0rem", md: "1.1rem" },
                       fontFamily: "'Rubik Bubbles', sans-serif",
                     }}
                   >
-                    Result: {lastGame.isWon ? " Won" : " Lost"}
+                    {lastGame.isWon ? "Won" : "Lost"}
                   </Typography>
+                  {lastGame.isWon ? (
+                    <SentimentVerySatisfiedIcon
+                      sx={{ color: "green", marginLeft: theme.spacing(1) }}
+                    />
+                  ) : (
+                    <SentimentVeryDissatisfiedIcon
+                      sx={{ color: "red", marginLeft: theme.spacing(1) }}
+                    />
+                  )}
                 </div>
               </div>
             </TableCell>
@@ -107,47 +123,83 @@ const RecentGame: React.FC = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  fontSize: { xs: "16px", md: "18px" },
-                  fontFamily: "'Rubik Bubbles', sans-serif",
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
+                  fontFamily: "'Nova Square', sans-serif",
                   marginBottom: theme.spacing(1),
                 }}
               >
-                Category: {lastGame.category}
+                Category:
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
+                  fontFamily: "'Rubik Bubbles', sans-serif",
+                }}
+              >
+                {lastGame.category}
               </Typography>
             </TableCell>
           </TableRow>
-
           <TableRow>
             <TableCell>
               <Typography
                 variant="body1"
                 sx={{
-                  fontSize: { xs: "16px", md: "18px" },
-                  fontFamily: "'Rubik Bubbles', sans-serif",
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
+                  fontFamily: "'Nova Square', sans-serif",
                   marginBottom: theme.spacing(1),
                 }}
               >
-                Top 4 Predictions: {predictions.join(", ")}
+                Top 4 Predictions:
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
+                  fontFamily: "'Rubik Bubbles', sans-serif",
+                }}
+              >
+                {predictions.map((prediction: string, index: number) => (
+                  <div key={index}>
+                    {prediction}
+                    {index < predictions.length - 1 && <br />}
+                  </div>
+                ))}
               </Typography>
             </TableCell>
           </TableRow>
-
           <TableRow>
             <TableCell>
               <Typography
                 variant="body1"
                 sx={{
-                  fontSize: { xs: "16px", md: "18px" },
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
+                  fontFamily: "'Nova Square', sans-serif",
+                }}
+              >
+                Date:
+              </Typography>
+            </TableCell>
+            <TableCell>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: "1.0rem", md: "1.1rem" },
                   fontFamily: "'Rubik Bubbles', sans-serif",
                 }}
               >
-                Date: {new Date(lastGame.createdAt).toLocaleDateString()}
+                {new Date(lastGame.createdAt).toLocaleDateString()}
               </Typography>
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
-    </>
+    </Paper>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   TextField,
   Avatar,
@@ -15,17 +15,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { useNavigate } from "react-router-dom";
 import { updateUserThunk } from "../redux/user/user.actions";
-import {
-  WebGLRenderer,
-  Scene,
-  PerspectiveCamera,
-  Color,
-  PointsMaterial,
-  BufferGeometry,
-  BufferAttribute,
-  Points,
-  Float32BufferAttribute,
-} from "three";
+import StarsAnimation2 from "../components/StarsAnimation2";
 
 const Settings: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
@@ -82,70 +72,6 @@ const Settings: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const createPointsMesh = () => {
-  //     const scene = new Scene();
-  //     const camera = new PerspectiveCamera(
-  //       75,
-  //       window.innerWidth / window.innerHeight,
-  //       0.1,
-  //       1000
-  //     );
-  //     const renderer = new WebGLRenderer();
-  //     renderer.setSize(window.innerWidth, window.innerHeight);
-  //     document
-  //       .getElementById("three-js-container")
-  //       ?.appendChild(renderer.domElement);
-
-  //     const geometry = new BufferGeometry();
-  //     const numPoints = 1000;
-  //     const positions = new Float32Array(numPoints * 3);
-
-  //     for (let i = 0; i < numPoints * 3; i += 3) {
-  //       const radius = 7;
-  //       const theta = Math.random() * 2 * Math.PI;
-  //       const phi = Math.acos(2 * Math.random() - 1);
-  //       positions[i] = radius * Math.sin(phi) * Math.cos(theta);
-  //       positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
-  //       positions[i + 2] = radius * Math.cos(phi);
-  //     }
-
-  //     geometry.setAttribute(
-  //       "position",
-  //       new BufferAttribute(new Float32Array(positions), 3)
-  //     );
-
-  //     // geometry.setAttribute(
-  //     //   "position",
-  //     //   new Float32BufferAttribute(positions, 3)
-  //     // );
-
-  //     const material = new PointsMaterial({ size: 0.05, color: 0xffffff });
-  //     const points = new Points(geometry, material);
-  //     scene.add(points);
-
-  //     camera.position.z = 5;
-
-  //     const animate = () => {
-  //       requestAnimationFrame(animate);
-  //       renderer.render(scene, camera);
-  //     };
-
-  //     animate();
-
-  //     window.addEventListener("resize", () => {
-  //       const newWidth = window.innerWidth;
-  //       const newHeight = window.innerHeight;
-
-  //       camera.aspect = newWidth / newHeight;
-  //       camera.updateProjectionMatrix();
-
-  //       renderer.setSize(newWidth, newHeight);
-  //     });
-  //   };
-
-  //   createPointsMesh();
-  // }, []);
   return (
     <Box
       sx={{
@@ -157,7 +83,7 @@ const Settings: React.FC = () => {
       }}
     >
       <CssBaseline />
-      <Container maxWidth={false} sx={{ mt: 15, mb: 5 }}>
+      <Container maxWidth="md" sx={{ mt: 12, mb: 5 }}>
         <Paper
           elevation={8}
           sx={{
@@ -180,8 +106,8 @@ const Settings: React.FC = () => {
               sx={{
                 width: "100%",
                 height: "auto",
-                maxWidth: 300,
-                maxHeight: 300,
+                maxWidth: 200,
+                maxHeight: 200,
                 border: "4px solid #fff",
 
                 mb: 2,
@@ -190,6 +116,7 @@ const Settings: React.FC = () => {
                   transform: "scale(1.05)",
                   boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   "&::after": {
+                    fontFamily: "'Nova Square', sans-serif",
                     content: "'Change Avatar'",
                     position: "absolute",
                     top: 0,
@@ -275,36 +202,19 @@ const Settings: React.FC = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ fontFamily: "'Nova Square', sans-serif" }}
+                >
                   Save Changes
                 </Button>
               </Grid>
             </Grid>
           </form>
         </Paper>
-        {/* <div
-        id="three-js-container"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          zIndex: -1,
-        }}
-      /> */}
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "linear-gradient(45deg, #2196F3, #FF5722)",
-            // animation: "gradientAnimation 15s ease infinite",
-            zIndex: -1,
-          }}
-        />
+        <StarsAnimation2 />
       </Container>
     </Box>
   );
