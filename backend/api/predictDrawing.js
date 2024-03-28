@@ -5,7 +5,7 @@ const { Game } = require("../db/models");
 router.post("/", async (req, res) => {
   try {
     const { canvas_data, room_name, user_id, category } = req.body;
-    const flaskResponse = await axios.post("http://127.0.0.1:5000/predict", {
+    const flaskResponse = await axios.post("https://flask-server-jtnk.onrender.com/predict", {
       canvas_data,
       room_name,
       user_id,
