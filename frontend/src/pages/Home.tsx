@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import RenderBackgroundImage from "../components/RenderBackgroundImage";
 import Image1 from "../assets/background/background16.jpg";
 import Image2 from "../assets/background/background9.jpg";
+// import singleplayerMode from "../assets/single-player-mode.png";
+// import multiplayerMode from "../assets/multiplayer-mode.png";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -23,13 +25,13 @@ const cardsData = [
     id: 1,
     title: "Single Mode",
     description: "Challenge yourself",
-    imageUrl: "https://source.unsplash.com/random?wallpapers",
+    // imageUrl: singleplayerMode,
   },
   {
     id: 2,
     title: "Multipler Mode",
     description: "Challenge your friends",
-    imageUrl: "https://source.unsplash.com/random?nature",
+    // imageUrl: multiplayerMode,
   },
 ];
 
@@ -65,7 +67,10 @@ const Home: React.FC = () => {
       <RenderBackgroundImage imageSource={Image2} low={20} high={50} />
       <CssBaseline />
       <Container maxWidth="lg">
-        <section className="section1" style={{ height: "100vh" }}>
+        <section
+          className="section1"
+          style={{ height: "100vh", marginBottom: 2 }}
+        >
           <Typography
             component="h1"
             variant="h2"
@@ -133,9 +138,10 @@ const Home: React.FC = () => {
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 transition: "transform 0.2s ease-in-out",
                 "&:hover": {
-                  bgcolor: darkMode === true ? "pink" : "black",
+                  bgcolor: darkMode === true ? "pink" : "red",
                   borderColor: darkMode === true ? "white" : "skyblue",
                   transform: "scale(1.05)",
+                  color: darkMode === true ? "black" : "white",
                 },
               }}
             >
@@ -217,13 +223,7 @@ const Home: React.FC = () => {
                     }}
                     elevation={8}
                   >
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        pt: "60%",
-                      }}
-                      image={card.imageUrl}
-                    />
+                    <CardMedia component="div" />
                     <CardContent sx={{ flexGrow: 1 }}>
                       <Typography
                         gutterBottom

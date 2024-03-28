@@ -106,7 +106,7 @@ const SinglePlayerCanvas = () => {
 
   const startGameTimer = useCallback(() => {
     setStartButtonVisible(false);
-    setTimer(30);
+    setTimer(15);
     setHasSubmittedDrawing(false);
     setIsDrawing(false);
     setIsErasing(false);
@@ -133,7 +133,7 @@ const SinglePlayerCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const imageData = canvas.toDataURL();
-    const roomName = "hi";
+    const roomName = "test";
     const userId = "1";
     const data = {
       canvas_data: imageData,
@@ -144,12 +144,11 @@ const SinglePlayerCanvas = () => {
     try {
       setHasSubmittedDrawing(true);
       setStartButtonVisible(true);
-      let response: any;
       if (isLoggedIn) {
-        response = await dispatch(userPredictDrawingThunk(data));
-        await dispatch(fetchGamesThunk());
+        await dispatch(userPredictDrawingThunk(data));
+        dispatch(fetchGamesThunk());
       } else {
-        response = await dispatch(guestPredictDrawingThunk(data));
+        await dispatch(guestPredictDrawingThunk(data));
       }
 
       handleOpenResponseDialog();
@@ -293,7 +292,7 @@ const SinglePlayerCanvas = () => {
           }}
         >
           <Box sx={{ mt: 3, zIndex: 1 }}>
-            <CircularProgressWithLabel value={(timer / 60) * 100} />
+            <CircularProgressWithLabel value={(timer / 15) * 100} />
           </Box>
           <Box sx={{ zIndex: 1 }}>
             <CategoryPicker onSelectCategory={handleCategorySelect} />

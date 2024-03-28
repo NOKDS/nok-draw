@@ -1,4 +1,9 @@
-import time
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from keras.models import load_model
@@ -9,6 +14,8 @@ from PIL import Image
 import cv2
 
 app = Flask(__name__)
+port = int(os.environ.get('PORT', 10000))
+
 CORS(app, origins="*")
 
 categories = [
@@ -19,6 +26,7 @@ categories = [
               "triangle", "snake", "beach", "camera", "sandwhich",
               "chair", "arm", "bed", "baseball", "snowman"
               ]
+
 model = load_model('NOK_CNN.h5', compile=False)
 
 def preprocess_canvas_image(base64_str, target_size=(28, 28)):
@@ -132,4 +140,4 @@ def predictMany():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=port, debug=False)

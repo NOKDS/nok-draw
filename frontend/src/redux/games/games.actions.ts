@@ -34,10 +34,10 @@ export const addGameThunk =
   (gameData: any): ThunkAction<void, RootState, null, AnyAction> =>
   async (dispatch) => {
     try {
-      console.log("ADDGAMETHUNK IS FIRING UP");
+      // console.log("ADDGAMETHUNK IS FIRING UP");
       const response = await axios.post(
-        "http://localhost:8080/api/games",
-        // `https://nok-draw-backend.vercel.app/api/games`,
+        // "http://localhost:8080/api/games",
+        `https://nok-draw-backend.vercel.app/api/games`,
         gameData,
         {
           withCredentials: true,
@@ -52,11 +52,11 @@ export const addGameThunk =
 export const fetchGamesThunk =
   (): ThunkAction<void, RootState, null, AnyAction> => async (dispatch) => {
     try {
-      console.log("fetchGamesThunk IS FIRING UP");
+      // console.log("fetchGamesThunk IS FIRING UP");
 
       const response = await axios.get(
-        "http://localhost:8080/api/games",
-        // `https://nok-draw-backend.vercel.app/api/games`,
+        // "http://localhost:8080/api/games",
+        `https://nok-draw-backend.vercel.app/api/games`,
         {
           withCredentials: true,
         }
@@ -68,7 +68,9 @@ export const fetchGamesThunk =
   };
 
 export const guestPredictDrawingThunk =
-  (gameData: DrawingData): ThunkAction<void, RootState, null, AnyAction> =>
+  (
+    gameData: DrawingData
+  ): ThunkAction<Promise<any>, RootState, null, AnyAction> =>
   async (dispatch) => {
     let retries = 0;
     const MAX_RETRIES = 3;
@@ -76,8 +78,8 @@ export const guestPredictDrawingThunk =
     while (retries < MAX_RETRIES) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/predict",
-          // "https://nok-draw-backend.vercel.app/api/predict",
+          // "http://localhost:8080/api/predict",
+          "https://nok-draw-backend.vercel.app/api/predict",
           gameData
         );
 
@@ -98,7 +100,9 @@ export const guestPredictDrawingThunk =
   };
 
 export const userPredictDrawingThunk =
-  (gameData: DrawingData): ThunkAction<void, RootState, null, AnyAction> =>
+  (
+    gameData: DrawingData
+  ): ThunkAction<Promise<any>, RootState, null, AnyAction> =>
   async (dispatch) => {
     let retries = 0;
     const MAX_RETRIES = 3;
@@ -106,8 +110,8 @@ export const userPredictDrawingThunk =
     while (retries < MAX_RETRIES) {
       try {
         const response = await axios.post(
-          "http://localhost:8080/api/predict",
-          // "https://nok-draw-backend.vercel.app/api/predict",
+          // "http://localhost:8080/api/predict",
+          "https://nok-draw-backend.vercel.app/api/predict",
           gameData,
           {
             withCredentials: true,

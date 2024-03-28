@@ -41,18 +41,26 @@ const RenderBackgroundImage: React.FC<RenderBackgroundImageProps> = ({
   const { darkMode } = useTheme();
 
   const parallaxStyle: React.CSSProperties = {
+    // position: "absolute",
+    // backgroundImage: `url(${imageSource})`,
+    // filter: darkMode === true ? `brightness(${low}%)` : `brightness(${high}%)`,
+    // width: "100%",
+    // minHeight: "100%",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // backgroundAttachment: "fixed",
+    // backgroundPosition: "50% 50%",
+    // backgroundRepeat: "no-repeat",
+    // backgroundSize: "cover",
+    // transition: "filter 0.5s ease-in-out",
+    // zIndex: -1,
     position: "absolute",
     backgroundImage: `url(${imageSource})`,
     filter: darkMode === true ? `brightness(${low}%)` : `brightness(${high}%)`,
     width: "100%",
     minHeight: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundAttachment: "fixed",
-    backgroundPosition: "50% 50%",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
-    transition: "filter 0.5s ease-in-out",
     zIndex: -1,
   };
 
