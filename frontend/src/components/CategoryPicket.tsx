@@ -18,6 +18,25 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({
     "lion",
     "penguin",
     "rabbit",
+    "airplane",
+    "computer",
+    "crocodile",
+    "clock",
+    "compass",
+    "camel",
+    "fireplace",
+    "campfire",
+    "diamond",
+    "triangle",
+    "snake",
+    "beach",
+    "camera",
+    "sandwhich",
+    "chair",
+    "arm",
+    "bed",
+    "baseball",
+    "snowman",
   ];
   const [randomCategory, setRandomCategory] = useState<string | null>(null);
 
@@ -42,7 +61,7 @@ const CategoryPicker: React.FC<CategoryPickerProps> = ({
       }}
     >
       <p style={{ fontSize: "1rem", fontWeight: "normal" }}>
-        Category:{" "}
+        Draw:{" "}
         <span style={{ color: "#007bff", fontWeight: "bold" }}>
           {randomCategory?.toUpperCase()}
         </span>

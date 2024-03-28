@@ -16,12 +16,16 @@ import { AnyAction } from "redux";
 import { useNavigate } from "react-router-dom";
 import { updateUserThunk } from "../redux/user/user.actions";
 import StarsAnimation2 from "../components/StarsAnimation2";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Settings: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
   const navigate = useNavigate();
   const [passwordsMatch, setPasswordsMatch] = React.useState(true);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [userData, setUserData] = React.useState({
     email: user.email,
@@ -73,17 +77,24 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <Box
+    <Container
+      component="main"
+      maxWidth={isSmallScreen ? false : "lg"}
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
+        padding: 2,
       }}
     >
       <CssBaseline />
-      <Container maxWidth="md" sx={{ mt: 12, mb: 5 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
+          mt: isSmallScreen ? "20%" : "10%",
+        }}
+      >
         <Paper
           elevation={8}
           sx={{
@@ -146,28 +157,57 @@ const Settings: React.FC = () => {
                   required
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Username"
-                  name="username"
-                  value={userData.username}
-                  onChange={handleChange}
-                  variant="outlined"
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Name"
-                  name="name"
-                  value={userData.name}
-                  onChange={handleChange}
-                  variant="outlined"
-                  required
-                />
-              </Grid>
+              {isSmallScreen ? (
+                <>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Username"
+                      name="username"
+                      value={userData.username}
+                      onChange={handleChange}
+                      variant="outlined"
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={6} sm={6}>
+                    <TextField
+                      fullWidth
+                      label="Name"
+                      name="name"
+                      value={userData.name}
+                      onChange={handleChange}
+                      variant="outlined"
+                      required
+                    />
+                  </Grid>
+                </>
+              ) : (
+                <>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Username"
+                      name="username"
+                      value={userData.username}
+                      onChange={handleChange}
+                      variant="outlined"
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Name"
+                      name="name"
+                      value={userData.name}
+                      onChange={handleChange}
+                      variant="outlined"
+                      required
+                    />
+                  </Grid>
+                </>
+              )}
               <Grid item xs={12}>
                 <TextField
                   fullWidth
@@ -215,8 +255,8 @@ const Settings: React.FC = () => {
           </form>
         </Paper>
         <StarsAnimation2 />
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 };
 

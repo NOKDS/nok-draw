@@ -20,13 +20,17 @@ import Alert from "@mui/material/Alert";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
-import RenderBackgroundImage from "../components/RenderBackgroundImage";
+import CircularProgress from "@mui/material/CircularProgress";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 import Image from "../assets/background/background3.jpg";
-import { CircularProgress } from "@mui/material";
+import RenderBackgroundImage from "../components/RenderBackgroundImage";
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -89,7 +93,13 @@ const SignIn: React.FC = () => {
     <>
       <RenderBackgroundImage imageSource={Image} low={30} high={70} />
 
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth={isSmallScreen ? false : "sm"}
+        sx={{
+          padding: isSmallScreen ? 2 : 4,
+        }}
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -97,7 +107,8 @@ const SignIn: React.FC = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "100vh",
+            width: "100%",
+            mt: isSmallScreen ? "20%" : "30%",
           }}
         >
           <Paper
@@ -113,10 +124,6 @@ const SignIn: React.FC = () => {
               "&:hover": {
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                 opacity: 0.95,
-              },
-              "@media (max-width: 600px)": {
-                margin: 2,
-                padding: 1,
               },
             }}
           >
@@ -146,7 +153,7 @@ const SignIn: React.FC = () => {
                 autoComplete="email user-name"
                 autoFocus
                 value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
+                onChange={(e) => setIdentifier(e.target.value.toLowerCase())}
               />
               <TextField
                 margin="normal"
@@ -176,7 +183,7 @@ const SignIn: React.FC = () => {
                 {isLoading ? <CircularProgress size={25} /> : "Sign In"}
               </Button>
               <GoogleLoginButton />
-              <Grid container justifyContent="center" sx={{ mt: 2 }}>
+              {/* <Grid container justifyContent="center" sx={{ mt: 2 }}>
                 <Link
                   href="#"
                   variant="body2"
@@ -186,7 +193,7 @@ const SignIn: React.FC = () => {
                 >
                   Forgot password?
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid container justifyContent="center" sx={{ mt: 1 }}>
                 <Link
                   href="/signup"

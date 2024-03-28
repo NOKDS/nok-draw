@@ -17,9 +17,12 @@ import { RootState } from "../redux/rootReducer";
 const RecentGame: React.FC = () => {
   const theme = useTheme();
   const games = useSelector((state: RootState) => state.games.games);
-  const lastGame = games[games.length - 1];
-
-  if (!lastGame) {
+  const guestGame = useSelector((state: RootState) => state.games.game);
+  const lastGame = games[games.length - 1] || guestGame || null;
+  if (
+    !lastGame ||
+    (typeof lastGame === "object" && Object.keys(lastGame).length === 0)
+  ) {
     return (
       <div>
         <Typography
@@ -46,7 +49,22 @@ const RecentGame: React.FC = () => {
     );
   }
 
-  const predictions = JSON.parse(lastGame.top4Predications);
+  let predictions;
+
+  if (typeof lastGame.top4Predications === "string") {
+    try {
+      predictions = JSON.parse(lastGame.top4Predications);
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+    }
+  } else if (Array.isArray(lastGame.top4Predications)) {
+    predictions = lastGame.top4Predications;
+  } else {
+    console.error(
+      "Unexpected type for top4Predications:",
+      typeof lastGame.top4Predications
+    );
+  }
 
   return (
     <Paper
@@ -118,31 +136,34 @@ const RecentGame: React.FC = () => {
               </div>
             </TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: "1.0rem", md: "1.1rem" },
-                  fontFamily: "'Nova Square', sans-serif",
-                  marginBottom: theme.spacing(1),
-                }}
-              >
-                Category:
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: "1.0rem", md: "1.1rem" },
-                  fontFamily: "'Rubik Bubbles', sans-serif",
-                }}
-              >
-                {lastGame.category}
-              </Typography>
-            </TableCell>
-          </TableRow>
+          {lastGame.category && (
+            <TableRow>
+              <TableCell>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: "1.0rem", md: "1.1rem" },
+                    fontFamily: "'Nova Square', sans-serif",
+                    marginBottom: theme.spacing(1),
+                  }}
+                >
+                  Drawing:
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: "1.0rem", md: "1.1rem" },
+                    fontFamily: "'Rubik Bubbles', sans-serif",
+                  }}
+                >
+                  {lastGame.category}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
+
           <TableRow>
             <TableCell>
               <Typography
@@ -173,30 +194,32 @@ const RecentGame: React.FC = () => {
               </Typography>
             </TableCell>
           </TableRow>
-          <TableRow>
-            <TableCell>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: "1.0rem", md: "1.1rem" },
-                  fontFamily: "'Nova Square', sans-serif",
-                }}
-              >
-                Date:
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: "1.0rem", md: "1.1rem" },
-                  fontFamily: "'Rubik Bubbles', sans-serif",
-                }}
-              >
-                {new Date(lastGame.createdAt).toLocaleDateString()}
-              </Typography>
-            </TableCell>
-          </TableRow>
+          {lastGame.createdAt && (
+            <TableRow>
+              <TableCell>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: "1.0rem", md: "1.1rem" },
+                    fontFamily: "'Nova Square', sans-serif",
+                  }}
+                >
+                  Date:
+                </Typography>
+              </TableCell>
+              <TableCell>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: "1.0rem", md: "1.1rem" },
+                    fontFamily: "'Rubik Bubbles', sans-serif",
+                  }}
+                >
+                  {new Date(lastGame.createdAt).toLocaleDateString()}
+                </Typography>
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </Paper>

@@ -18,14 +18,18 @@ import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
 import { RootState } from "../redux/rootReducer";
 import { signupUserThunk } from "../redux/user/user.actions";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Alert from "@mui/material/Alert";
-import Image from "../assets/background/background3.jpg";
 import RenderBackgroundImage from "../components/RenderBackgroundImage";
 import { CircularProgress } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Image from "../assets/background/background3.jpg";
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch() as ThunkDispatch<RootState, null, AnyAction>;
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -84,7 +88,7 @@ const SignUp: React.FC = () => {
         password: password.trim(),
       };
 
-      await dispatch(signupUserThunk(userData));
+      dispatch(signupUserThunk(userData));
 
       resetForm();
       navigate("/dashboard");
@@ -107,7 +111,13 @@ const SignUp: React.FC = () => {
     <>
       <RenderBackgroundImage imageSource={Image} low={30} high={70} />
 
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth={isSmallScreen ? false : "sm"}
+        sx={{
+          padding: isSmallScreen ? 2 : 4,
+        }}
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -115,7 +125,8 @@ const SignUp: React.FC = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "100vh",
+            width: "100%",
+            mt: isSmallScreen ? "20%" : "30%",
           }}
         >
           <Paper
@@ -151,7 +162,7 @@ const SignUp: React.FC = () => {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                   <TextField
                     autoComplete="given-name"
                     name="firstName"
@@ -164,7 +175,7 @@ const SignUp: React.FC = () => {
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                   <TextField
                     required
                     fullWidth
@@ -185,7 +196,7 @@ const SignUp: React.FC = () => {
                     name="username"
                     autoComplete="user-name"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value.toLowerCase())}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -197,7 +208,7 @@ const SignUp: React.FC = () => {
                     name="email"
                     autoComplete="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value.toLowerCase())}
                   />
                 </Grid>
                 <Grid item xs={12}>

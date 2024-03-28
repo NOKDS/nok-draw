@@ -9,7 +9,7 @@ function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number }
 ) {
   const { darkMode, theme } = useTheme();
-  const seconds = Math.round(props.value / (100 / 60));
+  const seconds = Math.round(props.value / (100 / 15));
   return (
     <Box
       sx={{
@@ -62,7 +62,7 @@ function CircularProgressWithLabel(
                 : theme.palette.revPrimary.main,
           }}
         >
-          {seconds > 9 ? seconds : `${seconds}s`}
+          {seconds > 9 ? seconds : `${seconds}`}
         </Typography>
       </Box>
     </Box>

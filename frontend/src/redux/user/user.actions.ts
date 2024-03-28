@@ -45,10 +45,10 @@ export const setLoginStatus = (isLoggedIn: boolean) => ({
 export const fetchUserThunk =
   (): ThunkAction<void, RootState, null, AnyAction> => async (dispatch) => {
     try {
-      console.log("FETCHUSERTHUNK FIRING UP");
+      // console.log("FETCHUSERTHUNK FIRING UP");
       const response = await axios.get(
-        `http://localhost:8080/auth/me`,
-        // `https://nok-draw-backend.vercel.app/auth/me`,
+        // `http://localhost:8080/auth/me`,
+        `https://nok-draw-backend.vercel.app/auth/me`,
         {
           withCredentials: true,
         }
@@ -63,7 +63,7 @@ export const updateUserThunk =
   (userData: any): ThunkAction<void, RootState, null, AnyAction> =>
   async (dispatch) => {
     try {
-      console.log("UPDATEUSERTHUNK FIRING UP");
+      // console.log("UPDATEUSERTHUNK FIRING UP");
       const response = await axios.put(
         // `http://localhost:8080/api/me`,
         `https://nok-draw-backend.vercel.app/api/me`,
@@ -83,7 +83,7 @@ export const signupUserThunk =
   (userData: any): ThunkAction<void, RootState, null, AnyAction> =>
   async (dispatch) => {
     try {
-      console.log("SIGNUPUSERTHUNK FIRING UP");
+      // console.log("SIGNUPUSERTHUNK FIRING UP");
       const response = await axios.post(
         // `http://localhost:8080/auth/signup`,
         `https://nok-draw-backend.vercel.app/auth/signup`,
@@ -91,7 +91,7 @@ export const signupUserThunk =
         userData,
         { withCredentials: true }
       );
-      console.log("here:", response);
+      // console.log("here:", response);
       dispatch(signupUser(response.data));
       dispatch(setLoginStatus(true));
     } catch (error) {
@@ -105,7 +105,7 @@ export const loginUserThunk =
   (userData: any): ThunkAction<void, RootState, null, AnyAction> =>
   async (dispatch) => {
     try {
-      console.log("LOGINUSERTHUNK FIRING UP");
+      // console.log("LOGINUSERTHUNK FIRING UP");
 
       const response = await axios.post(
         // `http://localhost:8080/auth/login`,
@@ -126,7 +126,7 @@ export const loginUserThunk =
 export const logoutUserThunk =
   (): ThunkAction<void, RootState, null, AnyAction> => async (dispatch) => {
     try {
-      console.log("LOGOUTUSERTHUNK FIRING UP");
+      // console.log("LOGOUTUSERTHUNK FIRING UP");
 
       await axios.get(
         // `http://localhost:8080/auth/logout`,

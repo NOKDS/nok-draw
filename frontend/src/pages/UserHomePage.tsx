@@ -23,13 +23,11 @@ const cardsData = [
     id: 1,
     title: "Single Mode",
     description: "Challenge yourself",
-    imageUrl: "https://source.unsplash.com/random?wallpapers",
   },
   {
     id: 2,
     title: "Multipler Mode",
     description: "Challenge your friends",
-    imageUrl: "https://source.unsplash.com/random?nature",
   },
 ];
 
@@ -65,7 +63,10 @@ const Home: React.FC = () => {
       <RenderBackgroundImage imageSource={Image2} low={20} high={50} />
       <CssBaseline />
       <Container maxWidth="lg">
-        <section className="section1" style={{ height: "100vh" }}>
+        <section
+          className="section1"
+          style={{ height: "100vh", marginBottom: 2 }}
+        >
           <Typography
             component="h1"
             variant="h2"
@@ -133,9 +134,10 @@ const Home: React.FC = () => {
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 transition: "transform 0.2s ease-in-out",
                 "&:hover": {
-                  bgcolor: darkMode === true ? "pink" : "black",
+                  bgcolor: darkMode === true ? "pink" : "red",
                   borderColor: darkMode === true ? "white" : "skyblue",
                   transform: "scale(1.05)",
+                  color: darkMode === true ? "black" : "white",
                 },
               }}
             >
@@ -217,13 +219,7 @@ const Home: React.FC = () => {
                     }}
                     elevation={8}
                   >
-                    <CardMedia
-                      component="div"
-                      sx={{
-                        pt: "60%",
-                      }}
-                      image={card.imageUrl}
-                    />
+                    <CardMedia component="div" />
                     <CardContent sx={{ flexGrow: 1 }}>
                       <Typography
                         gutterBottom
@@ -232,7 +228,12 @@ const Home: React.FC = () => {
                         color="text.primary"
                         sx={{
                           fontFamily: "'Rubik Bubbles', sans-serif",
-                          fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" },
+                          fontSize: {
+                            xs: "0.9rem",
+                            sm: "1rem",
+                            md: "1.5rem",
+                          },
+                          textAlign: "center",
                         }}
                       >
                         {card.title}
@@ -245,10 +246,11 @@ const Home: React.FC = () => {
                         sx={{
                           fontFamily: "'Nova Square', sans-serif",
                           fontSize: {
-                            xs: "0.6rem",
-                            sm: "0.7rem",
-                            md: "0.8rem",
+                            xs: "0.7rem",
+                            sm: "0.8rem",
+                            md: "0.9rem",
                           },
+                          textAlign: "center",
                         }}
                       >
                         {card.description}
